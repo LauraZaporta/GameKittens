@@ -1,0 +1,6 @@
+@API.GameKittens_HostAddress = http://localhost:5124
+
+GET {{API.GameKittens_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
