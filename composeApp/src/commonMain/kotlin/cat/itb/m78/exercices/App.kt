@@ -20,6 +20,4 @@ import org.jetbrains.compose.reload.DevelopmentEntryPoint
 import testDB
 
 @Composable
-internal fun App() = AppTheme {
-    StudentsNavigation()
-}
+internal fun App() = AppTheme { }
