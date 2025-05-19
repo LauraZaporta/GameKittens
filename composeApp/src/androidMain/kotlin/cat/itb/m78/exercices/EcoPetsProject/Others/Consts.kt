@@ -13,8 +13,8 @@ fun getFontFamily() : FontFamily{
 
 object ColorConstants {
     val colorAncientPink = Color(0XFFB7828E)
-    val colorJamPink = Color(0XFF7BA3A7)
-    val colorCottonPink = Color(0XFF6BE6F0)
+    val colorJamPink = Color(0XFFE5A3B1 )
+    val colorCottonPink = Color(0XFFFBCBD7)
     val colorVanilla = Color(0XFFFDF8D3)
     val colorWhiteNotWhite = Color(0XFFFFFCE5 )
     val colorGrey = Color(0XFF333333)
