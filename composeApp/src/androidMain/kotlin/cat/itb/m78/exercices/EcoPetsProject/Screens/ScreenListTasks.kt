@@ -7,12 +7,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -20,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
+import coil3.compose.AsyncImage
 
 @Composable
 fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
@@ -31,10 +38,10 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
 @Composable
 fun ScreenListTasksArguments(
     tasks: List<Task>,
-    filterString: String,
+    stringFilter: String,
     onUpdateFilter: (String) -> Unit,
-    atributToSearch: String,
-    onUpdateAtributFilter:(String) -> Unit,
+    attributeToSearchBy: Boolean, //When it's false search by tasks votes. When it's true search by tasks employee user name
+    onUpdateAttributeFilter: () -> Unit,
     navigateToScreenAddTask:() -> Unit,
     navigateToScreenDetailsTask: (Int) -> Unit
 ){
@@ -45,11 +52,28 @@ fun ScreenListTasksArguments(
             ) {
                 Text("Send Sustainable Task", textAlign = TextAlign.Center)
             }
-            TextField(
-                value = filterString,
-                label = { Text(text = "") },
-                onValueChange = { onUpdateFilter(it) }
-            )
+            if (attributeToSearchBy) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Search by User Name")
+                    TextField(
+                        value = stringFilter,
+                        label = { Text(text = "") },
+                        onValueChange = { onUpdateFilter(it) }
+                    )
+                }
+            } else{
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Search by Task Votes")
+                    TextField(
+                        value = stringFilter,
+                        label = { Text(text = "") },
+                        onValueChange = { onUpdateFilter(it) }
+                    )
+                }
+                IconButton(onClick = { onUpdateAttributeFilter() }) {
+                    Icon(Icons.Default.MoreVert, contentDescription = "Change search option")
+                }
+            }
         }
         Text("Tasks List:", fontSize = 30.sp, fontWeight = FontWeight(800))
         LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
