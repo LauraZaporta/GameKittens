@@ -9,11 +9,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -51,13 +48,13 @@ fun Navigation(){
     val navController = rememberNavController()
 
     val listNavElementsBottom = listOf(
-        NavigationBarItem("Tasks", Icons.Default.Check, {}),
-        NavigationBarItem("Pet", Icons.Default.FavoriteBorder, {}),
-        NavigationBarItem("Ranking", Icons.Default.Star, {})
+        NavigationBarItem("Tasks", Icons.Default.Check) { navController.navigate(Destination.ScreenListTasks) },
+        NavigationBarItem("Pet", Icons.Default.FavoriteBorder) { navController.navigate(Destination.ScreenPet) },
+        NavigationBarItem("Ranking", Icons.Default.Star) { navController.navigate(Destination.ScreenRank) }
     )
     val listNavElementsTop = listOf(
-        NavigationBarItem("Send points", Icons.Default.MailOutline, {}),
-        NavigationBarItem("Profile", Icons.Default.AccountCircle, {})
+        NavigationBarItem("Send points", Icons.Default.MailOutline) { navController.navigate(Destination.ScreenSendPoints) },
+        NavigationBarItem("Profile", Icons.Default.AccountCircle) { navController.navigate(Destination.ScreenProfile) }
     )
 
     Scaffold (topBar = { GenerateNavigationBarTop(listNavElementsTop, 0) },

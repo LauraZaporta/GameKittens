@@ -16,7 +16,7 @@ import coil3.compose.AsyncImage
 
 
 @Composable
-fun TaskInfo(
+fun ScreenDetailsTask(
     task: Task
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
