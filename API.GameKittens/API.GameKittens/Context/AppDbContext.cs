@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.GameKittens.Context
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        DbSet<STask> STasks { get; set; }
-        DbSet<Pet> Pets { get; set; }
-        DbSet<Accessory> Accessories { get; set; }
+        public DbSet<STask> STasks { get; set; }
+        public DbSet<Pet> Pets { get; set; }
+        public DbSet<Accessory> Accessories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

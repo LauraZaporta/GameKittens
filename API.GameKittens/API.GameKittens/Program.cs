@@ -1,11 +1,26 @@
+using API.GameKittens.Context;
+using Microsoft.EntityFrameworkCore;
+
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // Build delay
+        await Task.Delay(3000);
+
+
         // Add services to the container.
-        
+
+        //Afegim DbContext
+        var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
+        object value = builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+
+        builder.Services.AddRazorPages();
+        builder.Services.AddHttpContextAccessor();
+
         // Swagger
         builder.Services.AddSwaggerGen();
 
@@ -14,6 +29,7 @@ internal class Program
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
 
 
         /*--------------*/
