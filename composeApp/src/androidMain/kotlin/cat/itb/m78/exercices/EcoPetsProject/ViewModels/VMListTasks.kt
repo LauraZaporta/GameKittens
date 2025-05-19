@@ -6,11 +6,25 @@ import androidx.lifecycle.ViewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 
 class TasksListViewModel : ViewModel(){
-    val tasksList: MutableList<Task>? = null
+    val tasksList: MutableState<List<Task>?> = mutableStateOf(null) //List get from the API
+    val filteredList: MutableState<List<Task>?> = mutableStateOf(null)
     val filterString = mutableStateOf("")
-    val atributToSearch = mutableStateOf( "userName" )
+    val attributeToSearchBy = mutableStateOf( false )
 
     fun onUpdateFilter(newFilterString: String){
         filterString.value = newFilterString
+        if (attributeToSearchBy.value){
+            filteredList.value = tasksList.value?.filter {it.employee.userName.startsWith(filterString.value)}
+        } else{
+            filteredList.value = tasksList.value?.filter {it.votes.toString().startsWith(filterString.value)}
+        }
+    }
+    fun onUpdateAttributeFilter(){
+        attributeToSearchBy.value = !attributeToSearchBy.value
+    }
+
+    fun retrieveEntireList(){
+        filterString.value = ""
+        filteredList.value = tasksList.value
     }
 }

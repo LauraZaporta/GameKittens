@@ -4,6 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,10 +25,15 @@ fun ScreenDetailsTask(idTask : Int){
 
 @Composable
 fun ScreenDetailsTaskArguments(
-    task: Task
+    task: Task,
+    goBack: () -> Unit
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        IconButton(onClick = { goBack() }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "Go to previous page")
+        }
         Text(task.title, textAlign = TextAlign.Center, fontSize = 30.sp)
+        Text("${task.votes}")
         Row (horizontalArrangement = Arrangement.Center) {
             AsyncImage(
                 model = task.imageURI,
