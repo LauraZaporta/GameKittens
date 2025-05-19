@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarBottom
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarTop
@@ -45,13 +46,9 @@ object Destination{
     data object ScreenSendPoints
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
     val listNavElementsBottom = listOf(
         NavigationBarItem("Tasks", Icons.Default.Check, {}),
@@ -74,7 +71,15 @@ fun Navigation(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NavHost(navController = navController, startDestination = Destination.ScreenPet) {
-
+                composable<Destination.ScreenAddTask> { }
+                composable<Destination.ScreenCamera> { }
+                composable<Destination.ScreenDetailsTask> { }
+                composable<Destination.ScreenListTasks> { }
+                composable<Destination.ScreenLogin> { }
+                composable<Destination.ScreenPet> { }
+                composable<Destination.ScreenProfile> { }
+                composable<Destination.ScreenRank> { }
+                composable<Destination.ScreenSendPoints> { }
             }
         }
     }
