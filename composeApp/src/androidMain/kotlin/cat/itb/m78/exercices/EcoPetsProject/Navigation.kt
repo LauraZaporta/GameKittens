@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Scaffold
@@ -23,7 +25,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 object Destination{
-
+    @Serializable
+    data object ScreenAddTask
+    @Serializable
+    data object ScreenCamera
+    @Serializable
+    data class ScreenDetailsTask (val idTask : Int)
+    @Serializable
+    data object ScreenListTasks
+    @Serializable
+    data object ScreenLogin
+    @Serializable
+    data object ScreenPet
+    @Serializable
+    data object ScreenProfile
+    @Serializable
+    data object ScreenRank
+    @Serializable
+    data object ScreenSendPoints
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,9 +59,8 @@ fun Navigation(){
         NavigationBarItem("Ranking", Icons.Default.Star, {})
     )
     val listNavElementsTop = listOf(
-        NavigationBarItem("Points", Icons.Default., {}),
-        NavigationBarItem("Pet", Icons.Default.FavoriteBorder, {}),
-        NavigationBarItem("Ranking", Icons.Default.Star, {})
+        NavigationBarItem("Send points", Icons.Default.MailOutline, {}),
+        NavigationBarItem("Profile", Icons.Default.AccountCircle, {})
     )
 
     Scaffold (topBar = { GenerateNavigationBarTop(listNavElementsTop, 0) },
@@ -55,7 +73,7 @@ fun Navigation(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NavHost() {
+            NavHost(navController = navController, startDestination = Destination.ScreenPet) {
 
             }
         }
