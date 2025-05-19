@@ -1,4 +1,6 @@
+using System;
 using API.GameKittens.Context;
+using API.GameKittens.Models;
 using Microsoft.EntityFrameworkCore;
 
 internal class Program
@@ -14,7 +16,7 @@ internal class Program
         // Add services to the container.
 
         //Afegim DbContext
-        var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
+        var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
         object value = builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 
@@ -50,6 +52,7 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
 
         app.Run();
     }
