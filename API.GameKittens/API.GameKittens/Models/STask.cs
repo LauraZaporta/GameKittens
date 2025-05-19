@@ -13,6 +13,8 @@ namespace API.GameKittens.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageURL { get; set; }
-        // FR userId
+
+        // FR from user
+        public ApplicationUser User { get; set; } = null;
     }
 }
