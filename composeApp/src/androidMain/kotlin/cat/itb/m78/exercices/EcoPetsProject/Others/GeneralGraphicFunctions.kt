@@ -1,0 +1,72 @@
+package cat.itb.m78.exercices.EcoPetsProject.Others
+
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material3.NavigationBar
+
+data class NavigationBarItem(
+    val text: String,
+    val icon: ImageVector,
+    val function: () -> Unit
+)
+
+@Composable
+fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
+{
+    NavigationBar(){
+        listNavElements.forEach { item ->
+            NavigationBarItem(
+                selected = false,
+                onClick = item.function,
+                icon = { Icon(imageVector = item.icon,
+                    contentDescription = null,
+                    tint = Color.White)},
+                label = {Text(item.text,
+                    color = Color.White,
+                    fontFamily = getFontFamily())}
+            )
+        }
+    }
+}
+
+@Composable
+fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points : Int)
+{
+    NavigationBar {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "$$points",
+                color = Color.White,
+                fontFamily = getFontFamily(),
+                modifier = Modifier.padding(end = 16.dp)
+            )
+
+            listNavElements.forEach { item ->
+                NavigationBarItem(
+                    selected = false,
+                    onClick = item.function,
+                    icon = { Icon(imageVector = item.icon,
+                        contentDescription = null,
+                        tint = Color.White)},
+                    label = {Text(item.text,
+                        color = Color.White,
+                        fontFamily = getFontFamily())}
+                )
+            }
+        }
+    }
+}
