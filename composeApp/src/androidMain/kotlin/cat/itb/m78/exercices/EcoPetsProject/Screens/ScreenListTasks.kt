@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,8 @@ fun ScreenListTasksArguments(
     navigateToScreenAddTask:() -> Unit,
     navigateToScreenDetailsTask: (Int) -> Unit
 ){
+    val notValidFilter = remember {mutableStateOf(false)} //Used with the search by tasks votes
+
     Column (horizontalAlignment = Alignment.CenterHorizontally){
         Row {
             Button(
@@ -52,7 +55,7 @@ fun ScreenListTasksArguments(
             ) {
                 Text("Send Sustainable Task", textAlign = TextAlign.Center)
             }
-            if (attributeToSearchBy) {
+            if (attributeToSearchBy) {//search by user name
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Search by User Name")
                     TextField(
@@ -61,18 +64,26 @@ fun ScreenListTasksArguments(
                         onValueChange = { onUpdateFilter(it) }
                     )
                 }
-            } else{
+            } else{ //search by task votes
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("Search by Task Votes")
                     TextField(
                         value = stringFilter,
                         label = { Text(text = "") },
-                        onValueChange = { onUpdateFilter(it) }
+                        onValueChange = { sF ->
+                            if (sF.all { it.isDigit()}){
+                                notValidFilter.value = false
+                            } else {
+                                notValidFilter.value = true
+                                onUpdateFilter(sF)
+                            }
+                        }
                     )
+                    Text("The votes is a numeric value", color = Color.Red)
                 }
-                IconButton(onClick = { onUpdateAttributeFilter() }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "Change search option")
-                }
+            }
+            IconButton(onClick = { onUpdateAttributeFilter() }) {
+                Icon(Icons.Default.MoreVert, contentDescription = "Change search option")
             }
         }
         Text("Tasks List:", fontSize = 30.sp, fontWeight = FontWeight(800))

@@ -16,7 +16,7 @@ class TasksListViewModel : ViewModel(){
         if (attributeToSearchBy.value){
             filteredList.value = tasksList.value?.filter {it.employee.userName.startsWith(filterString.value)}
         } else{
-            filteredList.value = tasksList.value?.filter {it.title.startsWith(filterString.value)}
+            filteredList.value = tasksList.value?.filter {it.votes.toString().startsWith(filterString.value)}
         }
     }
     fun onUpdateAttributeFilter(){
