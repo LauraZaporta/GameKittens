@@ -27,7 +27,7 @@ fun TaskInfo(
                 contentDescription = "sustainable image",
                 modifier = Modifier.size(400.dp, 200.dp)
             )
-            Text("${task.userName} \n ${task.description}")
+            Text("${task.employee.userName}: \n <<${task.description}>>")
         }
     }
 }
