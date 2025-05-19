@@ -22,7 +22,7 @@ data class NavigationBarItem(
 @Composable
 fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
 {
-    NavigationBar(){
+    NavigationBar(containerColor = ColorConstants.colorAncientPink){
         listNavElements.forEach { item ->
             NavigationBarItem(
                 selected = false,
@@ -41,7 +41,7 @@ fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
 @Composable
 fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points : Int)
 {
-    NavigationBar {
+    NavigationBar(containerColor = ColorConstants.colorAncientPink) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

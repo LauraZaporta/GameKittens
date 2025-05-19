@@ -14,9 +14,13 @@ import androidx.compose.ui.unit.sp
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import coil3.compose.AsyncImage
 
+@Composable
+fun ScreenDetailsTask(){
+
+}
 
 @Composable
-fun ScreenDetailsTask(
+fun ScreenDetailsTaskArguments(
     task: Task
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally) {

@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarBottom
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarTop
 import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
+import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -70,8 +72,14 @@ fun Navigation(){
             NavHost(navController = navController, startDestination = Destination.ScreenPet) {
                 composable<Destination.ScreenAddTask> { }
                 composable<Destination.ScreenCamera> { }
-                composable<Destination.ScreenDetailsTask> { }
-                composable<Destination.ScreenListTasks> { }
+                composable<Destination.ScreenDetailsTask> { backStack ->
+                    val idTask = backStack.toRoute<Destination.ScreenDetailsTask>().idTask
+
+                }
+                composable<Destination.ScreenListTasks> {
+                    ScreenListTasks(navigateToScreenAddTask = {navController.navigate(Destination.ScreenAddTask)},
+                        navigateToScreenDetailsTask = {navController.navigate(Destination.ScreenDetailsTask(it))})
+                }
                 composable<Destination.ScreenLogin> { }
                 composable<Destination.ScreenPet> { }
                 composable<Destination.ScreenProfile> { }

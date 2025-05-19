@@ -22,7 +22,14 @@ import androidx.compose.ui.unit.sp
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 
 @Composable
-fun ScreenListTasks(
+fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
+                    navigateToScreenDetailsTask: (Int) -> Unit)
+{
+
+}
+
+@Composable
+fun ScreenListTasksArguments(
     tasks: List<Task>,
     filterString: String,
     onUpdateFilter: (String) -> Unit,
