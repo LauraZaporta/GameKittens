@@ -91,10 +91,10 @@ fun CameraArgumentsScreen(surfaceRequest: SurfaceRequest?, savedUri: Uri?, navCo
                     onClick = { takePhoto(context) },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black)
+                        containerColor = ColorConstants.colorVanilla)
                 ) {
                     Text("Take photo",
-                        color = Color.White,
+                        color = ColorConstants.colorAncientPink,
                         fontSize = 3.em,
                         fontFamily = getFontFamily()
                     )
