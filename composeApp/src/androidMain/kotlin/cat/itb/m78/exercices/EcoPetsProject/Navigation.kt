@@ -20,6 +20,7 @@ import androidx.navigation.toRoute
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarBottom
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarTop
 import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
+import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenDetailsTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
 import kotlinx.serialization.Serializable
 
@@ -74,7 +75,7 @@ fun Navigation(){
                 composable<Destination.ScreenCamera> { }
                 composable<Destination.ScreenDetailsTask> { backStack ->
                     val idTask = backStack.toRoute<Destination.ScreenDetailsTask>().idTask
-
+                    ScreenDetailsTask(idTask)
                 }
                 composable<Destination.ScreenListTasks> {
                     ScreenListTasks(navigateToScreenAddTask = {navController.navigate(Destination.ScreenAddTask)},

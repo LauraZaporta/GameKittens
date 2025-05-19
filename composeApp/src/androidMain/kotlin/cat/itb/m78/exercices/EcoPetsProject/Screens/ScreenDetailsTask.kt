@@ -15,7 +15,7 @@ import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import coil3.compose.AsyncImage
 
 @Composable
-fun ScreenDetailsTask(){
+fun ScreenDetailsTask(idTask : Int){
 
 }
 
