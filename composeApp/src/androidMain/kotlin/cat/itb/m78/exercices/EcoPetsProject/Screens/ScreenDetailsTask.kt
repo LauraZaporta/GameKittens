@@ -20,13 +20,14 @@ fun TaskInfo(
     task: Task
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(task.titel, textAlign = TextAlign.Center, fontSize = 30.sp)
+        Text(task.title, textAlign = TextAlign.Center, fontSize = 30.sp)
         Row (horizontalArrangement = Arrangement.Center) {
             AsyncImage(
                 model = task.imageURI,
                 contentDescription = "sustainable image",
                 modifier = Modifier.size(400.dp, 200.dp)
             )
+            Text("${task.userName} \n ${task.description}")
         }
     }
 }

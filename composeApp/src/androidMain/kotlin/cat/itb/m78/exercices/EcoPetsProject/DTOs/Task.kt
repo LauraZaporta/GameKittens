@@ -5,5 +5,5 @@ class Task(
     val title: String,
     val description: String,
     val imageURI: String,
-    val userName: String //Seleccionar el nom d'usuari de l'empleat a partir del seu ID a la BD
+    val employee: Employee
 )

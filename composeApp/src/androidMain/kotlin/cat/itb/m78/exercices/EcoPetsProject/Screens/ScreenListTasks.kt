@@ -21,7 +21,7 @@ import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 fun ScreenTasks(
     tasks: List<Task>,
     navigateToAddTaskScreen:() -> Unit,
-    navigateToTaskInfo: (Task) -> Unit
+    navigateToTaskInfo: (Int) -> Unit
 ){
     Column (horizontalAlignment = Alignment.CenterHorizontally){
         Button(
@@ -33,8 +33,8 @@ fun ScreenTasks(
         LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
             for (task in tasks) {
                 item {
-                    Box (modifier = Modifier.clickable { navigateToTaskInfo(task) }) {
-                        Text(" - ${task.titel}", fontSize = 20.sp)
+                    Box (modifier = Modifier.clickable { navigateToTaskInfo(task.id) }) {
+                        Text(" - ${task.title}", fontSize = 20.sp)
                         Text("   made by: ${task.userName}")
                         Spacer(modifier = Modifier.size(30.dp))
                     }
