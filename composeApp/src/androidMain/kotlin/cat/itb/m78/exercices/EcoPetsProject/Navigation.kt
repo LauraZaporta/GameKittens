@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.core.net.toUri
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,6 +21,8 @@ import androidx.navigation.toRoute
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarBottom
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarTop
 import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
+import cat.itb.m78.exercices.EcoPetsProject.Screens.PHOTO_URI_KEY
+import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenAddTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenCamera
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenDetailsTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
@@ -72,7 +75,14 @@ fun Navigation(){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NavHost(navController = navController, startDestination = Destination.ScreenPet) {
-                composable<Destination.ScreenAddTask> { }
+                composable<Destination.ScreenAddTask> { backStack ->
+                    val imageUriStr = backStack.savedStateHandle.get<String>(PHOTO_URI_KEY)
+                    val imageUri = imageUriStr?.toUri()
+
+                    ScreenAddTask(
+                        imageUri = imageUri,
+                        navigateToScreenCamera = {navController.navigate(Destination.ScreenCamera)})
+                }
                 composable<Destination.ScreenCamera> {
                     ScreenCamera (navController = navController)
                 }
