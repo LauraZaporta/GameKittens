@@ -1,6 +1,5 @@
 package cat.itb.m78.exercices.EcoPetsProject.Screens
 
-import android.widget.Space
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,7 +45,7 @@ fun ScreenProfileArguments(user: UserProfile){
         Spacer(modifier = Modifier.size(20.dp))
         Text(user.nameAndSurname, fontSize = 15.sp)
         Spacer(modifier = Modifier.size(10.dp))
-        Text("DNI: ${user.dni} \nPhone: ${user.phone}")
+        Text("DNI: ${user.dni} \nPhone: ${user.phone} \nEmail: ${user.email}")
         Spacer(modifier = Modifier.size(30.dp))
         if (user.petHunger.toInt() < 3){
             Text("My pet ${user.petName} is okay")
@@ -54,10 +53,11 @@ fun ScreenProfileArguments(user: UserProfile){
             if (user.petHunger.toInt() < 7){
                 Row{
                     Text("My pet ${user.petName}")
-                    Text(" is hungry!", color = Color.Red)
+                    Text(" is hungry!", color = Color.Yellow)
                 }
             } else{
-                Text("")
+                Text("My pet ${user.petName}")
+                Text(" is next to die!!!", color = Color.Red)
             }
         }
     }

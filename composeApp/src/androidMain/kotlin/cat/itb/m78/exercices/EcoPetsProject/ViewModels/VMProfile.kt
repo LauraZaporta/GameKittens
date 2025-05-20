@@ -11,7 +11,7 @@ class ProfileViewModel : ViewModel(){
     val user: MutableState<UserProfile?> = mutableStateOf(null)
     val employees: MutableState<List<Employee>?> = mutableStateOf(null)
     val pets: MutableState<List<Pet>?> = mutableStateOf(null)
-    val attributes = mutableListOf("", "", "", "", "", "")
+    val attributes = mutableListOf("", "", "", "", "", "", "")
 
 
     init {
@@ -26,6 +26,7 @@ class ProfileViewModel : ViewModel(){
                 attributes[1] = "${emp.surname}, ${emp.name}"
                 attributes[2] = emp.dni
                 attributes[3] = emp.phone.toString()
+                attributes[4] = emp.email
             }
         }
         for (p in pets.value!!){
@@ -39,8 +40,9 @@ class ProfileViewModel : ViewModel(){
             nameAndSurname = attributes[1],
             dni = attributes[2],
             phone = attributes[3],
-            petName = attributes[4],
-            petHunger = attributes[5]
+            email = attributes[4],
+            petName = attributes[5],
+            petHunger = attributes[6]
         )
     }
 }
