@@ -7,5 +7,6 @@ namespace API.GameKittens.Controllers
     [ApiController]
     public class PetController : ControllerBase
     {
+
     }
 }

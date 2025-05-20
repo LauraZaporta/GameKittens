@@ -171,7 +171,7 @@ namespace API.GameKittens.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -180,7 +180,8 @@ namespace API.GameKittens.Migrations
                         name: "FK_STasks_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,7 +212,7 @@ namespace API.GameKittens.Migrations
                     HungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ToHungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccessoryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -226,7 +227,8 @@ namespace API.GameKittens.Migrations
                         name: "FK_Pets_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -281,7 +283,8 @@ namespace API.GameKittens.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Pets_UserId",
                 table: "Pets",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_STasks_UserId",

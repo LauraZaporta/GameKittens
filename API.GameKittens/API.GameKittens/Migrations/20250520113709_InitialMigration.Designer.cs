@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.GameKittens.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250520063210_InitialMigration")]
+    [Migration("20250520113709_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -167,13 +167,15 @@ namespace API.GameKittens.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccessoryId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Pets");
                 });
@@ -199,6 +201,7 @@ namespace API.GameKittens.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ValidationVotes")
@@ -360,8 +363,10 @@ namespace API.GameKittens.Migrations
                         .IsRequired();
 
                     b.HasOne("API.GameKittens.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithOne("Pet")
+                        .HasForeignKey("API.GameKittens.Models.Pet", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Accessory");
 
@@ -371,8 +376,10 @@ namespace API.GameKittens.Migrations
             modelBuilder.Entity("API.GameKittens.Models.STask", b =>
                 {
                     b.HasOne("API.GameKittens.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -426,6 +433,14 @@ namespace API.GameKittens.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.GameKittens.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Pet")
+                        .IsRequired();
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("API.GameKittens.Models.Pet", b =>
