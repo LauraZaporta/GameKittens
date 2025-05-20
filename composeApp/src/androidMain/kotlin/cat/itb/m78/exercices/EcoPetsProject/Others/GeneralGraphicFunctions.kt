@@ -22,6 +22,10 @@ data class NavigationBarItem(
     val icon: ImageVector,
     val function: () -> Unit
 )
+data class NavigationBarItemNoText(
+    val icon: ImageVector,
+    val function: () -> Unit
+)
 
 @Composable
 fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
@@ -43,22 +47,24 @@ fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
 }
 
 @Composable
-fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points : Int)
+fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItemNoText>, points : Int)
 {
-    NavigationBar(containerColor = ColorConstants.colorAncientPink) {
+    NavigationBar(containerColor = ColorConstants.colorAncientPink,
+        modifier = Modifier.height(120.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(top = 55.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "$$points",
                 color = Color.White,
+                fontSize = 5.em,
                 fontFamily = getFontFamily(),
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(start = 40.dp)
             )
-
+            Spacer(Modifier.width(200.dp))
             listNavElements.forEach { item ->
                 NavigationBarItem(
                     selected = false,
@@ -66,11 +72,9 @@ fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points :
                     icon = { Icon(imageVector = item.icon,
                         contentDescription = null,
                         tint = Color.White)},
-                    label = {Text(item.text,
-                        color = Color.White,
-                        fontFamily = getFontFamily())}
                 )
             }
+            Spacer(Modifier.width(25.dp))
         }
     }
 }
