@@ -9,6 +9,10 @@ class TaskDetailsViewModel : ViewModel(){
     val task: MutableState<Task?> = mutableStateOf(null)
     val tasks: MutableState<List<Task>?> = mutableStateOf(null)
 
+    init {
+        //asks for tasks list to the API
+    }
+
     fun getTaskById(taskId: Int){
         for (t in tasks.value!!){
             if (t.id == taskId){
