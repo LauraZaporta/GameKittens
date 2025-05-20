@@ -28,6 +28,7 @@ data object Rank
 @Composable
 fun ScreenRank(){
     val viewModel = viewModel{ RankViewModel() }
+    viewModel.getRankList()
 
     Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         NavHost(navController = rememberNavController(), startDestination = Rank) {
