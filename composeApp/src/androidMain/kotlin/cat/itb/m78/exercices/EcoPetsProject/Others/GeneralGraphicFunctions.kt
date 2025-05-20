@@ -5,8 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -15,6 +19,10 @@ import androidx.compose.material3.NavigationBar
 
 data class NavigationBarItem(
     val text: String,
+    val icon: ImageVector,
+    val function: () -> Unit
+)
+data class NavigationBarItemNoText(
     val icon: ImageVector,
     val function: () -> Unit
 )
@@ -39,22 +47,24 @@ fun GenerateNavigationBarBottom(listNavElements : List<NavigationBarItem>)
 }
 
 @Composable
-fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points : Int)
+fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItemNoText>, points : Int)
 {
-    NavigationBar(containerColor = ColorConstants.colorAncientPink) {
+    NavigationBar(containerColor = ColorConstants.colorAncientPink,
+        modifier = Modifier.height(120.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(top = 55.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "$$points",
                 color = Color.White,
+                fontSize = 5.em,
                 fontFamily = getFontFamily(),
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(start = 40.dp)
             )
-
+            Spacer(Modifier.width(200.dp))
             listNavElements.forEach { item ->
                 NavigationBarItem(
                     selected = false,
@@ -62,11 +72,26 @@ fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points :
                     icon = { Icon(imageVector = item.icon,
                         contentDescription = null,
                         tint = Color.White)},
-                    label = {Text(item.text,
-                        color = Color.White,
-                        fontFamily = getFontFamily())}
                 )
             }
+            Spacer(Modifier.width(25.dp))
         }
+    }
+}
+
+@Composable
+fun GenerateImageButton(function : () -> Unit, text : String){
+    Button(
+        modifier = Modifier.height(40.dp).width(120.dp).padding(3.dp),
+        onClick = { function() },
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorConstants.colorVanilla)
+    ) {
+        Text(text,
+            color = ColorConstants.colorGrey,
+            fontSize = 3.em,
+            fontFamily = getFontFamily()
+        )
     }
 }

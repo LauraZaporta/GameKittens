@@ -21,6 +21,7 @@ import androidx.navigation.toRoute
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarBottom
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateNavigationBarTop
 import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
+import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItemNoText
 import cat.itb.m78.exercices.EcoPetsProject.Screens.PHOTO_URI_KEY
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenAddTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenCamera
@@ -61,8 +62,8 @@ fun Navigation(){
         NavigationBarItem("Ranking", Icons.Default.Star) { navController.navigate(Destination.ScreenRank) }
     )
     val listNavElementsTop = listOf(
-        NavigationBarItem("Send points", Icons.Default.MailOutline) { navController.navigate(Destination.ScreenSendPoints) },
-        NavigationBarItem("Profile", Icons.Default.AccountCircle) { navController.navigate(Destination.ScreenProfile) }
+        NavigationBarItemNoText(Icons.Default.MailOutline) { navController.navigate(Destination.ScreenSendPoints) },
+        NavigationBarItemNoText(Icons.Default.AccountCircle) { navController.navigate(Destination.ScreenProfile) }
     )
 
     Scaffold (topBar = { GenerateNavigationBarTop(listNavElementsTop, 0) },
