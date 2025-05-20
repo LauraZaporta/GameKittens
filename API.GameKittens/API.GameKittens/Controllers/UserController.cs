@@ -1,5 +1,7 @@
-﻿using API.GameKittens.Context;
+﻿using System.IO;
+using API.GameKittens.Context;
 using API.GameKittens.DTO;
+using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +30,7 @@ namespace API.GameKittens.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserGetDTO>>> GetAllUsers()
         {
-            var films = await _context.Users
+            var users = await _context.Users
                 .Select(f => new UserGetDTO
                 {
                     Name = f.Name,
@@ -37,7 +39,8 @@ namespace API.GameKittens.Controllers
                     Points = f.Points
                 })
                 .ToListAsync();
-            return Ok(films);
+
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
@@ -60,15 +63,72 @@ namespace API.GameKittens.Controllers
             return Ok(userDTO);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(string id, UserPutDTO user)
+        {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // Ask Laura why do that? Codi irevelant. Rachel clean code pls >:c
+        [HttpPatch]
+        public async Task<IActionResult> AddPointsToEmployee(string id, int points)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            //user.Points = user.Points + points;
+            //user.Points = points;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            return Ok();
+        }
+
+        private bool UserExists(string id)
+        {
+            return _context.Users.Any(u => u.Id == id);
+        }
     }
 }
-/*
-HttpGet() GetAllUsers
-HttpGet(id) GetUserById
-HttpPost() NewUser
-HttpDelete(id) DeleteUser
-HttpPut(id) EditEmployee
-HttpPatch(id) AddPointsToEmployee
-
- */
