@@ -14,6 +14,10 @@ class RankViewModel : ViewModel(){
     val employeesList: MutableState<List<Employee>?> = mutableStateOf(null)
     val usersPoints = mutableListOf(UserPoints("User Name", "Points"))
 
+    init {
+        //asks for employees list to the API
+    }
+
     fun getRankList(){
         for (emp in employeesList.value!!){
             usersPoints.add(UserPoints(emp.userName, emp.points.toString()))
