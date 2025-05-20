@@ -18,4 +18,6 @@ object ColorConstants {
     val colorVanilla = Color(0XFFFDF8D3)
     val colorWhiteNotWhite = Color(0XFFFFFCE5 )
     val colorGrey = Color(0XFF333333)
+    val colorGreen = Color(0XFF74C47C)
+    val colorRed = Color(0XFFCF5753)
 }

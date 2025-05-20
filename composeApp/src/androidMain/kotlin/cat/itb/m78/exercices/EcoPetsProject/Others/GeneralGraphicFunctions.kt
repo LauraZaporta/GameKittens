@@ -5,8 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -68,5 +72,22 @@ fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItem>, points :
                 )
             }
         }
+    }
+}
+
+@Composable
+fun GenerateImageButton(function : () -> Unit, text : String){
+    Button(
+        modifier = Modifier.height(40.dp).width(120.dp).padding(3.dp),
+        onClick = { function() },
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorConstants.colorVanilla)
+    ) {
+        Text(text,
+            color = ColorConstants.colorGrey,
+            fontSize = 3.em,
+            fontFamily = getFontFamily()
+        )
     }
 }
