@@ -47,6 +47,23 @@ fun ScreenRankArguments(
 
     Column (horizontalAlignment = Alignment.CenterHorizontally) {
         LazyColumn {
+            rankLine.value += usersPoints[0].userName
+            for (i in 9..40) {
+                rankLine.value += " "
+            }
+            rankLine.value += usersPoints[0].points
+            item {
+                Text(rankLine.value, fontSize = 20.sp, fontWeight = FontWeight(900))
+                Spacer(modifier = Modifier.size(25.dp))
+            }
+            for (i in 1..usersPoints.indices.last){
+                rankLine.value = ""
+                for (j in usersPoints[i].userName.indices){
+
+                }
+            }
+
+            // DON'T WORK HOW IT WAS SUPOSE TO DO
             for (up in usersPoints){
                 rankLine.value = ""
                 if (up.points.all { it.isDigit() }) {

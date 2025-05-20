@@ -19,8 +19,25 @@ class RankViewModel : ViewModel(){
     }
 
     fun getRankList(){
-        for (emp in employeesList.value!!){
-            usersPoints.add(UserPoints(emp.userName, emp.points.toString()))
+        val orderList: MutableState<UserPoints?> = mutableStateOf(null)
+
+        if (employeesList.value == null){
+            usersPoints.add(UserPoints("JoseFino", "100"))
+            usersPoints.add(UserPoints("PancracióElMarino", "1000"))
+        } else {
+            for (emp in employeesList.value!!) {
+                usersPoints.add(UserPoints(emp.userName, emp.points.toString()))
+            }
+        }
+        for(i in 1..<usersPoints.indices.last){
+            for (j in 2..usersPoints.indices.last){
+                if (usersPoints[j].points.toInt() > usersPoints[i].points.toInt()) {
+                    orderList.value = usersPoints[j]
+                    usersPoints[j] = usersPoints[i]
+                    usersPoints[i] = orderList.value!!
+                }
+                orderList.value = null
+            }
         }
     }
 }
