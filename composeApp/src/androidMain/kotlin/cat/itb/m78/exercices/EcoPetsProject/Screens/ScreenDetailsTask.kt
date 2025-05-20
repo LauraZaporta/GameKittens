@@ -23,6 +23,10 @@ import androidx.navigation.compose.rememberNavController
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.TaskDetailsViewModel
 import coil3.compose.AsyncImage
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object TaskDetails
 
 @Composable
 fun ScreenDetailsTask(idTask : Int){
@@ -30,8 +34,8 @@ fun ScreenDetailsTask(idTask : Int){
     viewModel.getTaskById(idTask)
 
     Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        NavHost(navController = rememberNavController(), startDestination = ListTasksArguments) {
-            composable<ListTasksArguments> {
+        NavHost(navController = rememberNavController(), startDestination = TaskDetails) {
+            composable<TaskDetails> {
                 ScreenDetailsTaskArguments( task = viewModel.task.value!! )
             }
         }
