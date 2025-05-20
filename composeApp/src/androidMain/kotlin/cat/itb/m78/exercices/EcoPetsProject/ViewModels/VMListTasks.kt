@@ -11,6 +11,11 @@ class TasksListViewModel : ViewModel(){
     val filterString = mutableStateOf("")
     val attributeToSearchBy = mutableStateOf( false )
 
+    init {
+        //tasksList.value = ...
+        filteredList.value = tasksList.value
+    }
+
     fun onUpdateFilter(newFilterString: String){
         filterString.value = newFilterString
         if (attributeToSearchBy.value){
