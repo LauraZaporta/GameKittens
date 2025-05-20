@@ -29,13 +29,7 @@ fun ScreenDetailsTask(idTask : Int){
     val viewModel = viewModel{ TaskDetailsViewModel() }
     viewModel.getTaskById(idTask)
 
-    Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        NavHost(navController = rememberNavController(), startDestination = ListTasksArguments) {
-            composable<ListTasksArguments> {
-                ScreenDetailsTaskArguments( task = viewModel.task.value!! )
-            }
-        }
-    }
+    ScreenDetailsTaskArguments( task = viewModel.task.value!! )
 }
 
 @Composable

@@ -1,44 +1,54 @@
 package cat.itb.m78.exercices.EcoPetsProject.Screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHost
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
+import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateOrderByButton
+import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.TasksListViewModel
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ListTasksArguments
-
 
 @Composable
 fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
@@ -46,81 +56,152 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
 {
     val viewModel = viewModel{ TasksListViewModel() }
 
-    Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        NavHost(navController = rememberNavController(), startDestination = ListTasksArguments) {
-            composable<ListTasksArguments> {
-                ScreenListTasksArguments(
-                    tasks = viewModel.filteredList.value!!,
-                    stringFilter = viewModel.filterString.value,
-                    onUpdateFilter = viewModel::onUpdateFilter,
-                    attributeToSearchBy = viewModel.attributeToSearchBy.value,
-                    onUpdateAttributeFilter = { viewModel.onUpdateAttributeFilter() },
-                    navigateToScreenAddTask = { navigateToScreenAddTask() },
-                    navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) }
-                )
-            }
-        }
-    }
+    ScreenListTasksArguments(
+        tasks = viewModel.tasksList.value,
+        stringFilter = viewModel.filterString,
+        orderedDesc = viewModel.orderedDesc,
+        navigateToScreenAddTask = { navigateToScreenAddTask() },
+        navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) },
+        like = viewModel::like,
+        dislike = viewModel::dislike,
+        sort = viewModel::sort,
+        sortIcon = viewModel.sortIcon.value
+    )
 }
 
 @Composable
 fun ScreenListTasksArguments(
     tasks: List<Task>,
-    stringFilter: String,
-    onUpdateFilter:(String) -> Unit,
-    attributeToSearchBy: Boolean, //When it's false search by tasks votes. When it's true search by tasks employee user name
-    onUpdateAttributeFilter:() -> Unit,
+    stringFilter: MutableState<String>,
+    orderedDesc: MutableState<Boolean>,
     navigateToScreenAddTask:() -> Unit,
-    navigateToScreenDetailsTask:(Int) -> Unit) {
-    val notValidFilter = remember {mutableStateOf(false)} //Used with the search by tasks votes
+    navigateToScreenDetailsTask:(Int) -> Unit,
+    like:(Task) -> Unit,
+    dislike:(Task) -> Unit,
+    sort:(List<Task>) -> List<Task>,
+    sortIcon: ImageVector)
+{
 
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
-        Row {
-            Button(
-                onClick = { navigateToScreenAddTask() }
-            ) {
-                Text("Send Sustainable Task", textAlign = TextAlign.Center)
-            }
-            if (attributeToSearchBy) {//search by user name
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Search by User Name")
-                    TextField(
-                        value = stringFilter,
-                        label = { Text(text = "") },
-                        onValueChange = { onUpdateFilter(it) }
-                    )
+    val filteredTasks = tasks.filter {it.employee.userName.contains(stringFilter.value, ignoreCase = true)}
+
+    Box(modifier = Modifier.background(ColorConstants.colorWhiteNotWhite).fillMaxSize())
+    {
+        Button(
+        modifier = Modifier.padding(10.dp).align(Alignment.BottomEnd),
+        onClick = { navigateToScreenAddTask() },
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = ColorConstants.colorCottonPink)
+    ) {
+        Text("Add task",
+            color = ColorConstants.colorGrey,
+            fontSize = 3.em,
+            fontFamily = getFontFamily()
+        )
+    }
+        Column (horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize().padding(top = 40.dp))
+        {
+            Text("Tasks List",
+                fontSize = 30.sp,
+                fontFamily = getFontFamily(),
+                color = ColorConstants.colorGrey
+            )
+            Row{
+                OutlinedTextField(
+                    modifier = Modifier.padding(top = 15.dp, bottom = 5.dp),
+                    value = stringFilter.value,
+                    label = { Text("Search by username") },
+                    onValueChange = { stringFilter.value = it }
+                )
+                Spacer(Modifier.width(15.dp))
+                Column{
+                    IconButton(onClick = {filteredTasks = (filteredTasks)})
+                    {
+                        Icon(
+                            imageVector = icon, contentDescription = null,
+                            modifier = Modifier.size(50.dp),
+                            tint = Color.Black,
+                        )
+                    }
                 }
-            } else { //search by task votes
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Search by Task Votes")
-                    TextField(
-                        value = stringFilter,
-                        label = { Text(text = "") },
-                        onValueChange = { sF ->
-                            if (sF.all { it.isDigit() }) {
-                                notValidFilter.value = false
-                            } else {
-                                notValidFilter.value = true
-                                onUpdateFilter(sF)
+            }
+            Spacer(Modifier.height(20.dp))
+            LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (filteredTasks.isEmpty()){
+                    item{
+                        Spacer(Modifier.height(15.dp))
+                        Text("This employee doesn't have tasks",
+                            fontFamily = getFontFamily(),
+                            color = ColorConstants.colorGrey)
+                    }
+                }
+                items(filteredTasks.chunked(2)) { rowTasks ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        rowTasks.forEach { task ->
+                            Card(
+                                modifier = Modifier
+                                    .width(150.dp)
+                                    .height(120.dp)
+                                    .clickable(
+                                        enabled = true,
+                                        onClickLabel = "Clickable card",
+                                        onClick = { navigateToScreenDetailsTask(task.id) }
+                                    )
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(ColorConstants.colorCottonPink)
+                                        .padding(8.dp),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Spacer(Modifier.height(5.dp))
+                                    Text(
+                                        task.title,
+                                        color = ColorConstants.colorGrey,
+                                        textAlign = TextAlign.Center,
+                                        fontFamily = getFontFamily()
+                                    )
+                                    Spacer(Modifier.height(5.dp))
+                                    Text(
+                                        "Made by ${task.employee.userName}",
+                                        color = ColorConstants.colorGrey,
+                                        fontFamily = getFontFamily()
+                                    )
+                                    Spacer(Modifier.height(5.dp))
+                                    Row(modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Center)
+                                        {
+                                        // S'haurà de modificar per a que canvii d'estat quan
+                                        // hi hagi connexió amb l'API
+                                        IconButton(onClick = { like(task) }) {
+                                            Icon(Icons.Default.Check,
+                                                contentDescription = null,
+                                                tint = ColorConstants.colorGrey)
+                                        }
+                                            Text(
+                                                task.votes.toString(),
+                                                modifier = Modifier.padding(top = 16.dp),
+                                                color = ColorConstants.colorGrey,
+                                                fontFamily = getFontFamily(),
+                                                fontWeight = FontWeight(500)
+                                            )
+                                        IconButton(onClick = { dislike(task) }) {
+                                            Icon(Icons.Default.Close,
+                                                contentDescription = null,
+                                                tint = ColorConstants.colorGrey)
+                                        }
+                                    }
+                                }
                             }
                         }
-                    )
-                    Text("The votes is a numeric value", color = Color.Red)
-                }
-            }
-            IconButton(onClick = { onUpdateAttributeFilter() }) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Change search option")
-            }
-        }
-        Text("Tasks List:", fontSize = 30.sp, fontWeight = FontWeight(800))
-        LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-            for (task in tasks) {
-                item {
-                    Box(modifier = Modifier.clickable { navigateToScreenDetailsTask(task.id) }) {
-                        Text(" - ${task.title}", fontSize = 20.sp)
-                        Text("   made by: ${task.employee.name}")
-                        Spacer(modifier = Modifier.size(30.dp))
                     }
+                    Spacer(Modifier.height(25.dp))
                 }
             }
         }

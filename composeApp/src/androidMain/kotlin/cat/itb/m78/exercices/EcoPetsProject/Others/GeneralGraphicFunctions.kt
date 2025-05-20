@@ -9,13 +9,18 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.NavigationBar
+import androidx.compose.ui.text.style.TextAlign
+import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 
 data class NavigationBarItem(
     val text: String,
@@ -83,15 +88,27 @@ fun GenerateNavigationBarTop(listNavElements : List<NavigationBarItemNoText>, po
 fun GenerateImageButton(function : () -> Unit, text : String){
     Button(
         modifier = Modifier.height(40.dp).width(120.dp).padding(3.dp),
-        onClick = { function() },
+        onClick = function,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ColorConstants.colorVanilla)
+            containerColor = ColorConstants.colorCottonPink)
     ) {
         Text(text,
             color = ColorConstants.colorGrey,
             fontSize = 3.em,
             fontFamily = getFontFamily()
+        )
+    }
+}
+
+@Composable
+fun GenerateOrderByButton(function : (List<Task>) -> List<Task>, icon : ImageVector){
+    IconButton(onClick = function)
+    {
+        Icon(
+            imageVector = icon, contentDescription = null,
+            modifier = Modifier.size(50.dp),
+            tint = Color.Black,
         )
     }
 }
