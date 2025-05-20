@@ -18,10 +18,13 @@ namespace API.GameKittens.Models
         public string HungryImage { get; set; }
         public string ToHungryImage { get; set; }
 
-        // FK from accessory
+        // Navigation: accesorios
         public Accessory Accessory { get; set; }
         public List<Accessory> AvailablesAccessories { get; set; }
-        // FK from user
+
+        // FK to ApplicationUser (1:1)
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
     }
 }

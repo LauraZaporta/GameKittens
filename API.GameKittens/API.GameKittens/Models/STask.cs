@@ -14,7 +14,9 @@ namespace API.GameKittens.Models
         public string Description { get; set; }
         public string ImageURL { get; set; }
 
-        // FR from user
-        public ApplicationUser User { get; set; } = null;
+        // FK to ApplicationUser
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 }
