@@ -29,6 +29,7 @@ import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenDetailsTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenProfile
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenRank
+import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenSendPoints
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -105,7 +106,9 @@ fun Navigation(){
                 composable<Destination.ScreenRank> {
                     ScreenRank()
                 }
-                composable<Destination.ScreenSendPoints> { }
+                composable<Destination.ScreenSendPoints> {
+                    ScreenSendPoints()
+                }
             }
         }
     }
