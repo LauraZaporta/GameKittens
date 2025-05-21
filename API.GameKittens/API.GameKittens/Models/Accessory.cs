@@ -9,5 +9,11 @@ namespace API.GameKittens.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImageURL { get; set; }
+        public int Price { get; set; }
+
+        // Relación 1:N - Un accesorio puede estar en varias mascotas
+        public List<Pet> Pets { get; set; } = new();
     }
 }

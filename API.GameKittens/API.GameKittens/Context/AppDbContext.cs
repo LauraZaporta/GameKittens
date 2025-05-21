@@ -29,6 +29,12 @@ namespace API.GameKittens.Context
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            // Accessory → Pets (1:N)
+            modelBuilder.Entity<Accessory>()
+                .HasMany(a => a.Pets)
+                .WithOne(p => p.Accessory)
+                .HasForeignKey(p => p.AccessoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

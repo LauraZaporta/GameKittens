@@ -31,12 +31,12 @@ namespace API.GameKittens.Controllers
         public async Task<ActionResult<IEnumerable<UserGetDTO>>> GetAllUsers()
         {
             var users = await _context.Users
-                .Select(f => new UserGetDTO
+                .Select(u => new UserGetDTO
                 {
-                    Name = f.Name,
-                    Surename = f.Surename,
-                    Money = f.Money,
-                    Points = f.Points
+                    Name = u.Name,
+                    Surename = u.Surename,
+                    Money = u.Money,
+                    Points = u.Points
                 })
                 .ToListAsync();
 
@@ -79,7 +79,7 @@ namespace API.GameKittens.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, UserPutDTO user)
+        public async Task<IActionResult> PutUser(string id, ApplicationUser user)
         {
             if (id != user.Id)
             {
@@ -105,25 +105,6 @@ namespace API.GameKittens.Controllers
             }
 
             return NoContent();
-        }
-
-        // Ask Laura why do that? Codi irevelant. Rachel clean code pls >:c
-        [HttpPatch]
-        public async Task<IActionResult> AddPointsToEmployee(string id, int points)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            //user.Points = user.Points + points;
-            //user.Points = points;
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            return Ok();
         }
 
         private bool UserExists(string id)

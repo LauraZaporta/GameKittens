@@ -1,5 +1,6 @@
 ﻿using API.GameKittens.Context;
 using API.GameKittens.DTO;
+using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,58 +13,142 @@ namespace API.GameKittens.Controllers
     public class STaskController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<STaskController> _logger;
 
-        public STaskController(AppDbContext context, ILogger<STaskController> logger)
+        public STaskController(AppDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
         [AllowAnonymous]
-        [HttpGet("TestUserController")]
+        [HttpGet("TestSTaskController")]
         public IActionResult helloClient()
         {
             return Ok("Hello world");
         }
-        /*
-         public int Id { get; set; }
-        public int ValidationVotes { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string ImageURL { get; set; }
 
-        // FK to ApplicationUser
-        public string UserId { get; set; }
-         */
         [HttpGet]
         public async Task<ActionResult<IEnumerable<STaskGetDTO>>> GetAllSTasks()
         {
-            var tasks = await _context.STasks
-                .Select(f => new STaskGetDTO
+            var sTasks = await _context.STasks
+                .Select(t => new STaskGetDTO
                 {
-                    Id = f.Id,
-                    ValidationVotes = f.ValidationVotes,
-                    Title = f.Title,
-                    Description = f.Description,
-                    ImageURL = f.ImageURL,
-                    UserId = f.UserId
+                    Id = t.Id,
+                    ValidationVotes = t.ValidationVotes,
+                    Title = t.Title,
+                    Description = t.Description,
+                    ImageURL = t.ImageURL,
+                    UserId = t.UserId,
+                    UserName = $"{t.User.Name} + {t.User.Surename}"
                 })
-                .Include(u => u.UserId)
                 .ToListAsync();
 
-            return Ok(tasks);
+            return Ok(sTasks);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<STaskGetDTO>> GetSTaskById(int id)
+        {
+            var task = await _context.STasks.FindAsync(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<STask>> PostSTask(STaskInsertDTO staskDTO)
+        {
+            // Verificar si el user existeix
+            var user = await _context.Users.FindAsync(staskDTO.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var sTask = new STask
+            {
+                Title = staskDTO.Title,
+                Description = staskDTO.Description,
+                ValidationVotes = 0,
+                ImageURL = staskDTO.ImageURL,
+                UserId = staskDTO.UserId
+            };
+
+            try
+            {
+                await _context.STasks.AddAsync(sTask);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex);
+            }
+
+
+            return CreatedAtAction(nameof(GetSTaskById), new { id = sTask.Id }, staskDTO);
+            //return Ok(sTask);
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteSTask(int id)
+        {
+            var sTask = await _context.STasks.FindAsync(id);
+            if (sTask == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                _context.STasks.Remove(sTask);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                return BadRequest(ex);
+            }
+            return NoContent();
+        }
+
+        [HttpPut("put/{id}")]
+        public async Task<IActionResult> PutSTask(int id, STask sTask)
+        {
+            if (id != sTask.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(sTask).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!STaskExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        private bool STaskExists(int id)
+        {
+            return _context.STasks.Any(t => t.Id == id);
         }
     }
 }
 
 /*
-HttpGet() GetAllTasks
-HttpGet(id) GetTaskById
 HttpGet(employee/id) GetTaskByUserId
-HttpPost() NewTask
-HttpDelete(id) DeleteTask
-HttpPut(id) EditTask
-HttpPatch(id) TaskValidate
-
- */
+HttpPatch(id) bool TaskValidate
+*/
