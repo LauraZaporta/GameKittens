@@ -18,14 +18,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -36,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
-import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateOrderByButton
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.TasksListViewModel
 
@@ -57,9 +51,8 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
     val viewModel = viewModel{ TasksListViewModel() }
 
     ScreenListTasksArguments(
-        tasks = viewModel.tasksList.value,
+        tasks = viewModel.sortedTasksList.value,
         stringFilter = viewModel.filterString,
-        orderedDesc = viewModel.orderedDesc,
         navigateToScreenAddTask = { navigateToScreenAddTask() },
         navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) },
         like = viewModel::like,
@@ -73,12 +66,11 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
 fun ScreenListTasksArguments(
     tasks: List<Task>,
     stringFilter: MutableState<String>,
-    orderedDesc: MutableState<Boolean>,
     navigateToScreenAddTask:() -> Unit,
     navigateToScreenDetailsTask:(Int) -> Unit,
     like:(Task) -> Unit,
     dislike:(Task) -> Unit,
-    sort:(List<Task>) -> List<Task>,
+    sort:() -> Unit,
     sortIcon: ImageVector)
 {
 
@@ -116,10 +108,10 @@ fun ScreenListTasksArguments(
                 )
                 Spacer(Modifier.width(15.dp))
                 Column{
-                    IconButton(onClick = {filteredTasks = (filteredTasks)})
+                    IconButton(onClick = sort, modifier = Modifier.padding(top = 25.dp))
                     {
                         Icon(
-                            imageVector = icon, contentDescription = null,
+                            imageVector = sortIcon, contentDescription = null,
                             modifier = Modifier.size(50.dp),
                             tint = Color.Black,
                         )

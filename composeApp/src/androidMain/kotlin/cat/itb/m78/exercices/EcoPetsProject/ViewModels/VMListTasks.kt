@@ -3,24 +3,32 @@ package cat.itb.m78.exercices.EcoPetsProject.ViewModels
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 
 class TasksListViewModel : ViewModel(){
-    val tasksList = mutableStateOf<List<Task>>(emptyList()) //List get from the API
-    val filteredTasksList = mutableStateOf(tasksList) //List get from the API
+    private val tasksList = mutableStateOf<List<Task>>(emptyList()) //List get from the API
+    private val orderedDesc = mutableStateOf(true)
+    val sortedTasksList = mutableStateOf<List<Task>>(emptyList())
     val filterString = mutableStateOf("")
-    val orderedDesc = mutableStateOf(true)
     val sortIcon = mutableStateOf(Icons.Default.KeyboardArrowDown)
 
     init {
         // Temp value
         val sampleEmployee = Employee("12345",
-            "HolaA",
+            "HMiku",
+            "Hola",
+            "Adéu",
+            "78230984Z",
+            987654321,
+            "@gmail.com",
+            "hola12345",
+            0,
+            0)
+        val sampleEmployee2 = Employee("12345",
+            "PeppaPig",
             "Hola",
             "Adéu",
             "78230984Z",
@@ -39,7 +47,7 @@ class TasksListViewModel : ViewModel(){
         )
         val sampleTask2 = Task(
             id = 1,
-            votes = 5,
+            votes = 3,
             title = "Nova funcionalitat",
             description = "Implementar la pantalla de login",
             imageURI = "https://example.com/image.jpg",
@@ -47,29 +55,30 @@ class TasksListViewModel : ViewModel(){
         )
         val sampleTask3 = Task(
             id = 1,
-            votes = 5,
+            votes = 7,
             title = "Nova funcionalitat",
             description = "Implementar la pantalla de login",
             imageURI = "https://example.com/image.jpg",
-            employee = sampleEmployee
+            employee = sampleEmployee2
         )
         tasksList.value = listOf(sampleTask, sampleTask2, sampleTask3)
+        sortedTasksList.value = tasksList.value.sortedByDescending { it.votes }
     }
 
-    fun sort(tasksToSort : List<Task>) : List<Task>{
+    fun sort(){
         return if (orderedDesc.value){
+            val descSortedList = tasksList.value.sortedBy { it.votes }
             orderedDesc.value = !orderedDesc.value
             sortIcon.value = Icons.Default.KeyboardArrowUp
-            tasksToSort.sortedByDescending { it.votes }
+            sortedTasksList.value = descSortedList
         } else {
+            val ascSortedList = tasksList.value.sortedByDescending { it.votes }
             orderedDesc.value = !orderedDesc.value
             sortIcon.value = Icons.Default.KeyboardArrowDown
-            tasksToSort.sortedBy { it.votes }
+            sortedTasksList.value = ascSortedList
         }
     }
-    fun filterByName(){
-        filteredTasksList.value = tasksList.value.filter {it.employee.userName.contains(stringFilter.value, ignoreCase = true)}
-    }
+
     fun like(task: Task){ }
     fun dislike(task: Task){ }
 }

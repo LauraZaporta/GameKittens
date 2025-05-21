@@ -100,15 +100,3 @@ fun GenerateImageButton(function : () -> Unit, text : String){
         )
     }
 }
-
-@Composable
-fun GenerateOrderByButton(function : (List<Task>) -> List<Task>, icon : ImageVector){
-    IconButton(onClick = function)
-    {
-        Icon(
-            imageVector = icon, contentDescription = null,
-            modifier = Modifier.size(50.dp),
-            tint = Color.Black,
-        )
-    }
-}

@@ -10,8 +10,8 @@ class VMAddTask : ViewModel(){
     val addingImage = mutableStateOf(false)
     val validNewTask = mutableStateOf<Boolean?>(null)
     val uri = mutableStateOf<Uri?>(null)
-    val title = mutableStateOf<String?>(null)
-    val desc = mutableStateOf<String?>(null)
+    val title = mutableStateOf("")
+    val desc = mutableStateOf("")
 
     private fun fetchEmployee() : Employee{
         return Employee("12345",
@@ -26,17 +26,19 @@ class VMAddTask : ViewModel(){
             0)
     }
     fun addTask(){
-        if (uri.value != null && title.value != null && desc.value != null){
+        if (uri.value != null && title.value != "" && desc.value != ""){
             Task(1,
                 0,
-                title.value!!,
-                desc.value!!,
+                title.value,
+                desc.value,
                 uri.value.toString(),
                 fetchEmployee()
             )
             // Crida API per afegir tasca
             validNewTask.value = true
         }
-        validNewTask.value = false
+        else {
+            validNewTask.value = false
+        }
     }
 }

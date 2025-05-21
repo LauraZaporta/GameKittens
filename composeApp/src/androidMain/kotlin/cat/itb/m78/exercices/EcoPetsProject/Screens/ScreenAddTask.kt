@@ -54,8 +54,8 @@ fun ScreenAddTask(imageUri: Uri?, navigateToScreenCamera: () -> Unit) {
 }
 
 @Composable
-fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<String?>,
-                           newDesc : MutableState<String?>, addingImage: MutableState<Boolean>,
+fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<String>,
+                           newDesc : MutableState<String>, addingImage: MutableState<Boolean>,
                            validTask: Boolean?, addTask : () -> Unit, navigateToScreenCamera: () -> Unit)
 {
     val context = LocalContext.current
@@ -113,12 +113,11 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
                     .border(BorderStroke(1.dp, ColorConstants.colorCottonPink), RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
-            Spacer(Modifier.height(10.dp))
         } else {
             Column(
                 modifier = Modifier
                     .border(
-                        BorderStroke(1.dp, SolidColor(ColorConstants.colorCottonPink)),
+                        BorderStroke(1.dp, SolidColor(ColorConstants.colorJamPink)),
                         shape = RoundedCornerShape(7.dp)
                     )
                     .width(200.dp)
@@ -132,7 +131,7 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
                     Icon(
                         imageVector = Icons.Filled.AddCircle, contentDescription = "Camera",
                         modifier = Modifier.size(100.dp),
-                        tint = ColorConstants.colorAncientPink
+                        tint = ColorConstants.colorCottonPink
                     )
                 }
                 Spacer(Modifier.height(5.dp))
@@ -152,20 +151,20 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
             onClick = { addTask() },
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = ColorConstants.colorAncientPink)
+                containerColor = ColorConstants.colorCottonPink)
         ) {
             Text("Add",
-                color = Color.White,
+                color = ColorConstants.colorGrey,
                 fontSize = 4.em,
                 fontFamily = getFontFamily()
             )
         }
         if (validTask == true){
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(20.dp))
             Text("Task inserted!", color = ColorConstants.colorGreen)
         }
         else if (validTask == false){
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(20.dp))
             Text("One of the fields is missing!", color = ColorConstants.colorRed)
         }
     }
