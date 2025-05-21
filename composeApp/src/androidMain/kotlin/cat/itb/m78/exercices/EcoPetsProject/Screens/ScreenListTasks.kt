@@ -42,13 +42,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
-import cat.itb.m78.exercices.EcoPetsProject.ViewModels.TasksListViewModel
+import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMListTasks
 
 @Composable
 fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
                     navigateToScreenDetailsTask: (Int) -> Unit)
 {
-    val viewModel = viewModel{ TasksListViewModel() }
+    val viewModel = viewModel{ VMListTasks() }
 
     ScreenListTasksArguments(
         tasks = viewModel.sortedTasksList.value,

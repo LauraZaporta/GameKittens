@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 
-class TasksListViewModel : ViewModel(){
+class VMListTasks : ViewModel(){
     private val tasksList = mutableStateOf<List<Task>>(emptyList()) //List get from the API
     private val orderedDesc = mutableStateOf(true)
     val sortedTasksList = mutableStateOf<List<Task>>(emptyList())

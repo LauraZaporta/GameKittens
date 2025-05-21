@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -98,5 +99,16 @@ fun GenerateImageButton(function : () -> Unit, text : String){
             fontSize = 3.em,
             fontFamily = getFontFamily()
         )
+    }
+}
+
+@Composable
+fun GenerateVoteButton(function: () -> Unit, color: Color, icon: ImageVector){
+    IconButton(onClick = function ){
+        Icon(
+            icon,
+            modifier = Modifier.size(70.dp),
+            contentDescription = null,
+            tint = color)
     }
 }
