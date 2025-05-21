@@ -11,6 +11,7 @@ class SendPointsViewModel : ViewModel() {
     val coinsToSend = mutableStateOf("")
     val empId = mutableStateOf("")
     val userName = mutableStateOf("")
+    val pointsSharedSuccess = mutableStateOf(false)
 
     init {
         //select a list of employees
@@ -36,8 +37,16 @@ class SendPointsViewModel : ViewModel() {
     }
 
     fun addPointsToTheUser(){
-        //select the employee with id = userId in te DB and update its points
-
+        //select the user in the DB
         //add an if that makes shore that the current user have more or equal points than what it wants to share
+        //select the employee with id = userId in the DB and, if it exists, update its points
+        //update the user points
+        pointsSharedSuccess.value = true //only if the points update was done
+    }
+
+    fun acceptYouSharedThePoints(){
+        pointsSharedSuccess.value = false
+        userName.value = ""
+        coinsToSend.value = ""
     }
 }
