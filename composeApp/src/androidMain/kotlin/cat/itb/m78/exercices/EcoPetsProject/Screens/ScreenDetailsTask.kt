@@ -5,19 +5,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Card
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +27,7 @@ import androidx.compose.ui.unit.em
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
-import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateVoteButton
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIconButton
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMDetailsTask
 import coil3.compose.AsyncImage
@@ -124,8 +120,8 @@ fun ScreenDetailsTaskArguments(
         }
         Row(modifier = Modifier.width(200.dp).padding(top = 20.dp),
             horizontalArrangement = Arrangement.SpaceAround){
-            GenerateVoteButton(like, ColorConstants.colorGreen, Icons.Default.Check)
-            GenerateVoteButton(dislike, ColorConstants.colorRed, Icons.Default.Close)
+            GenerateIconButton(like, ColorConstants.colorGreen, Icons.Default.Check, 70, 0)
+            GenerateIconButton(dislike, ColorConstants.colorRed, Icons.Default.Close, 70, 0)
         }
     }
 }

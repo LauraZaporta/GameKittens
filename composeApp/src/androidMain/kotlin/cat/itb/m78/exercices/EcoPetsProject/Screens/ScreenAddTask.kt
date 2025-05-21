@@ -88,7 +88,7 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
         Spacer(Modifier.height(25.dp))
         OutlinedTextField(
             modifier = Modifier.width(300.dp),
-            value = newTitle.value.toString(),
+            value = newTitle.value,
             onValueChange = { newTitle.value = it },
             label = { Text("Title", color = ColorConstants.colorGrey) },
             singleLine = true
@@ -96,7 +96,7 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
         Spacer(Modifier.height(15.dp))
         OutlinedTextField(
             modifier = Modifier.height(100.dp).width(300.dp),
-            value = newDesc.value.toString(),
+            value = newDesc.value,
             onValueChange = { newDesc.value = it },
             label = { Text("Description", color = ColorConstants.colorGrey) },
             maxLines = 4
