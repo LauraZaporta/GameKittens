@@ -6,13 +6,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,7 +45,10 @@ fun ScreenProfile(){
     val viewModel = viewModel{ ProfileViewModel() }
     viewModel.getCurrentUser(/*current user Id*/)
 
-    Column (modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column (
+        modifier = Modifier.fillMaxSize().background(color = ColorConstants.colorVanilla),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         NavHost(navController = rememberNavController(), startDestination = ScreenProfile) {
             composable<ScreenProfile> {
                 ScreenProfileArguments(viewModel.user.value!!)
@@ -48,33 +61,60 @@ fun ScreenProfile(){
 fun ScreenProfileArguments(user: UserProfile){
     Column (
         modifier = Modifier
-            .background(color = ColorConstants.colorVanilla)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(user.userName,
-            fontSize = 40.sp,
+            fontSize = 35.sp,
             fontWeight = FontWeight(800),
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.size(25.dp))
-        Box (modifier = Modifier.background(color = ColorConstants.colorCottonPink).padding(20.dp)) {
-            Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Card(
+            modifier = Modifier.fillMaxWidth().padding(start = 40.dp, end = 40.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column (horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .background(color = ColorConstants.colorCottonPink)
+                        .padding(20.dp)
+            ) {
                 Text(user.nameAndSurname,
                     fontSize = 20.sp,
                     fontWeight = FontWeight(500),
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.size(10.dp))
-                Text(
-                    "" +
-                            "\n | DNI: ${user.dni} " +
-                            "\n | Phone: ${user.phone}" +
-                            "\n | Email: ${user.email}",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight(500),
-                    textAlign = TextAlign.Start
-                )
+                Column {
+                    Row {
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Icon(Icons.Default.Face, contentDescription = "phone")
+                        Text(" | DNI: ${user.dni} ",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight(500),
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                    Row {
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Icon(Icons.Default.Phone, contentDescription = "phone")
+                        Text(" | Phone: ${user.phone}",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight(500),
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                    Row {
+                        Spacer(modifier = Modifier.padding(20.dp))
+                        Icon(Icons.Default.Email, contentDescription = "phone")
+                        Text(" | Email: ${user.email}",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight(500),
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                }
             }
         }
         Spacer(modifier = Modifier.size(50.dp))
