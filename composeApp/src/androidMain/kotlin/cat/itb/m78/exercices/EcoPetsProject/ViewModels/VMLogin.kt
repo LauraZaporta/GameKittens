@@ -25,6 +25,5 @@ class VMLogin: ViewModel(){
             loginMessage.value = "All fields are required!"
             validLogin.value = false
         }
-        
     }
 }

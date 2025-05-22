@@ -1,6 +1,8 @@
 package cat.itb.m78.exercices.EcoPetsProject.Others
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -10,10 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBarItem
@@ -21,11 +27,17 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
+import kotlin.math.exp
 
 data class NavigationBarItem(
     val text: String,
@@ -202,6 +214,55 @@ fun GenerateRankCard(user: String, points: String){
                 color = ColorConstants.colorGrey,
                 fontFamily = getFontFamily()
             )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenerateSearchableDropdown(text: MutableState<String>, employees: List<Employee>) {
+    val filteredEmployees = employees.filter { it.userName.contains(text.value, ignoreCase = true) }
+    var expanded by remember { mutableStateOf(false) }
+    var userChosen by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = false,
+        onExpandedChange = { expanded = false }
+    ) {
+        Column {
+            OutlinedTextField(
+                value = text.value,
+                onValueChange = {
+                    text.value = it
+                    expanded = it.isNotEmpty() && filteredEmployees.isNotEmpty() && !userChosen
+                    if (it.isEmpty()) userChosen = false
+                },
+                label = { Text("User to send points") },
+                modifier = Modifier.fillMaxWidth(),
+                trailingIcon = {
+                    if (expanded) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Collapse")
+                    } else {
+                        Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Expand")
+                    }
+                }
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                filteredEmployees.forEach { emp ->
+                    DropdownMenuItem(
+                        text = { Text(emp.userName) },
+                        onClick = {
+                            text.value = emp.userName
+                            expanded = false
+                            userChosen = true
+                        }
+                    )
+                }
+            }
         }
     }
 }
