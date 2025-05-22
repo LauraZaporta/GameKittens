@@ -1,17 +1,23 @@
 package cat.itb.m78.exercices.EcoPetsProject.Screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Pet
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Prop
+import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.PetViewModel
 import coil3.compose.AsyncImage
@@ -40,79 +47,116 @@ fun ScreenPet(){
 
     ScreenPetArguments(
         pet = viewModel.pet.value!!,
-        accessoryList = viewModel.accessoryList.value!!,
+        propsList = viewModel.accessoryList.value!!,
+        petImage = viewModel.petImage.value,
+        petProp = viewModel.petProp.value,
         isPetHungry = viewModel.isPetHungry.value,
-        updatePetHunger = { viewModel.updatePetHunger() }
+        updatePetHunger = { viewModel.updatePetHunger(it) }
     )
 }
 
 @Composable
 fun ScreenPetArguments(
     pet: Pet,
-    accessoryList: List<Prop>,
+    propsList: List<Prop>,
+    petImage: String,
+    petProp: String,
     isPetHungry: Boolean?,
-    updatePetHunger: () -> Unit
+    updatePetHunger: (Int) -> Unit
 ){
     val showCloths = remember { mutableStateOf(false) }
 
-    Row (modifier = Modifier.fillMaxWidth().padding(40.dp)){
-        Column(modifier = Modifier.fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(pet.name,
-                fontSize = 35.sp,
-                fontWeight = FontWeight(800),
-                textAlign = TextAlign.Center
-            )
-            Box {
-                when (isPetHungry){
-                    false -> {
-                        AsyncImage(
-                            model = pet.petImageUri,
-                            contentDescription = "Pet",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .padding(bottom = 5.dp)
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Text(pet.name,
+            fontSize = 35.sp,
+            fontWeight = FontWeight(800),
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.size(20.dp))
+        Box {
+            if (petImage != "") {
+                AsyncImage(
+                    model = petImage,
+                    contentDescription = "Pet image",
+                    modifier = Modifier.padding(5.dp).size(300.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            if (petProp != "") {
+                AsyncImage(
+                    model = petImage,
+                    contentDescription = "Pet accessory",
+                    modifier = Modifier.padding(5.dp).size(300.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.size(40.dp))
+
+        if (showCloths.value){
+            Row (
+                modifier = Modifier.fillMaxWidth().height(90.dp).background(ColorConstants.colorVanilla),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                LazyRow {
+                    for (p in propsList){
+                        item {
+                            Column (
+                                modifier = Modifier.padding(10.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ){
+                                IconButton(
+                                    onClick = {
+                                        updatePetHunger(-10)
+                                    },
+                                    modifier = Modifier.size(50.dp)
+                                ) {
+                                    AsyncImage(
+                                        model = p.imageUri,
+                                        contentDescription = p.name,
+                                        modifier = Modifier.padding(5.dp).size(300.dp),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+                                Text(p.name, textAlign = TextAlign.Center)
+                            }
+                        }
                     }
-                    null -> {
-                        AsyncImage(
-                            model = pet.hungerUri,
-                            contentDescription = "Pet hungry",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .padding(bottom = 5.dp)
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                    true -> {
-                        AsyncImage(
-                            model = pet.aLotOfHungerUri,
-                            contentDescription = "Pet so hungry",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .padding(bottom = 5.dp)
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
+                }
+
+                Spacer(modifier = Modifier.size(20.dp))
+
+                IconButton(
+                    onClick = {
+                        showCloths.value = !showCloths.value
+                    },
+                    modifier = Modifier.size(50.dp),
+                ) {
+                    Icon(
+                        Icons.Default.ShoppingCart,
+                        contentDescription = "Pet Cloths",
+                        modifier = Modifier.size(40.dp)
+                    )
                 }
             }
         }
-        Spacer(modifier = Modifier.size(30.dp))
-        Column(modifier = Modifier.fillMaxHeight(), horizontalAlignment = Alignment.End) {
-            Box(
-                contentAlignment = Alignment.TopEnd
-            ) {
+        else{
+            Row (
+                modifier = Modifier.fillMaxWidth().height(90.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ){
                 IconButton(
                     onClick = {
                         showCloths.value = !showCloths.value
                     },
-                    modifier = Modifier.size(50.dp)
+                    modifier = Modifier.size(50.dp),
                 ) {
                     Icon(
                         Icons.Default.ShoppingCart,
@@ -121,22 +165,65 @@ fun ScreenPetArguments(
                     )
                 }
             }
-            Box {
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth().height(90.dp).background(ColorConstants.colorVanilla),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ){
+            val hungerWidth = remember { mutableStateOf(0) }
+            if (pet.hunger < 10) { hungerWidth.value = 300 - pet.hunger * 30 }
+            else { hungerWidth.value = 15 }
+
+            if (pet.hunger < 3) {
+                Row(
+                    modifier = Modifier
+                        .background(ColorConstants.colorCottonPink)
+                        .padding(horizontal = 20.dp)
+                        .width(hungerWidth.value.dp)
+                        .height(30.dp)
+                ) {
+                    Text("${pet.hunger}")
+                }
+            } else if (pet.hunger < 7) {
+                Row(
+                    modifier = Modifier
+                        .background(ColorConstants.colorJamPink)
+                        .padding(horizontal = 20.dp)
+                        .width(hungerWidth.value.dp)
+                        .height(30.dp)
+                ) {
+                    Text("${pet.hunger}")
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .background(ColorConstants.colorRed)
+                        .padding(horizontal = 20.dp)
+                        .width(hungerWidth.value.dp)
+                        .height(30.dp)
+                ) {
+                    Text("${pet.hunger}")
+                }
+            }
+
+
+
+            Column {
                 IconButton(
                     onClick = {
-                        showCloths.value = !showCloths.value
+                        updatePetHunger(-10)
                     },
                     modifier = Modifier.size(50.dp)
                 ) {
                     Icon(
-                        Icons.Default.ShoppingCart,
-                        contentDescription = "Pet Cloths",
+                        Icons.Default.Info,
+                        contentDescription = "Pet Food",
                         modifier = Modifier.size(40.dp)
                     )
                 }
-                NavigationBarItem(" - $10", Icons.Default.Add){
-                    updatePetHunger()
-                }
+                Text(" -10 €")
             }
         }
     }
