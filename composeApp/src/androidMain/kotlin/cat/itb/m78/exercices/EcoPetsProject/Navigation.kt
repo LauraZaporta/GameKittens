@@ -29,6 +29,7 @@ import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenAddTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenCamera
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenDetailsTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
+import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenPet
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenProfile
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenRank
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenSendPoints
@@ -102,7 +103,9 @@ fun Navigation(){
                         navigateToScreenDetailsTask = {navController.navigate(Destination.ScreenDetailsTask(it))})
                 }
                 composable<Destination.ScreenLogin> { }
-                composable<Destination.ScreenPet> { }
+                composable<Destination.ScreenPet> {
+                    ScreenPet()
+                }
                 composable<Destination.ScreenProfile> {
                     ScreenProfile()
                 }
