@@ -4,9 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -34,27 +38,26 @@ data object Rank
 @Composable
 fun ScreenRank(){
     val viewModel = viewModel{ RankViewModel() }
-    viewModel.getRankList()
 
-    Column (
-        modifier = Modifier.fillMaxSize().background(ColorConstants.colorVanilla),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        NavHost(navController = rememberNavController(), startDestination = Rank) {
-            composable<Rank> {
-                ScreenRankArguments(ranking = viewModel.ranking)
-            }
-        }
-    }
+    ScreenRankArguments(ranking = viewModel.ranking)
 }
 
 @Composable
 fun ScreenRankArguments(
     ranking: List<String>
 ){
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(20.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardColors(
+            containerColor = ColorConstants.colorJamPink,
+            contentColor = Color.Black,
+            disabledContainerColor = ColorConstants.colorJamPink,
+            disabledContentColor = Color.Black
+        )
+    ){
     Column (modifier = Modifier
         .fillMaxSize()
-        .padding(20.dp)
         .background(ColorConstants.colorJamPink),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -71,7 +74,7 @@ fun ScreenRankArguments(
             for (i in 1..ranking.indices.last){
                 item {
                     Text(ranking[i],
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight(700),
                         textAlign = TextAlign.Center
                     )
@@ -80,4 +83,5 @@ fun ScreenRankArguments(
             }
         }
     }
+        }
 }

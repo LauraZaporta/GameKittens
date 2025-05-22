@@ -18,15 +18,12 @@ class RankViewModel : ViewModel() {
 
     init {
         //asks for employees list to the API
-    }
-
-    fun getRankList() {
         val orderList: MutableState<UserPoints?> = mutableStateOf(null)
         val rankLine = mutableStateOf("")
 
         if (employeesList.value == null) {
             usersPoints.add(UserPoints("Jose_Fina", "100"))
-            usersPoints.add(UserPoints("PancracióElMarino", "1000"))
+            usersPoints.add(UserPoints("PancracioElMarino", "1000"))
             usersPoints.add(UserPoints("EustaquioGarbanzos", "500"))
         } else {
             for (emp in employeesList.value!!) {
@@ -56,9 +53,13 @@ class RankViewModel : ViewModel() {
             for (j in usersPoints[i].userName.indices){
                 rankLine.value += usersPoints[i].userName[j]
             }
-            for (j in usersPoints[i].userName.length..40){
-                rankLine.value += "."
+
+            if (usersPoints[i].userName.length < 40) {
+                for (j in usersPoints[i].userName.length..40) {
+                    rankLine.value += ".."
+                }
             }
+
             for (j in usersPoints[i].points.indices){
                 rankLine.value += usersPoints[i].points[j]
             }
