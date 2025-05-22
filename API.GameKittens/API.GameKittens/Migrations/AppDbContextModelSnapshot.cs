@@ -30,12 +30,17 @@ namespace API.GameKittens.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("PetId")
+                    b.Property<string>("ImageURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PetId");
 
                     b.ToTable("Accessories");
                 });
@@ -131,7 +136,7 @@ namespace API.GameKittens.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AccessoryId")
+                    b.Property<int?>("AccessoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("Animal")
@@ -141,11 +146,9 @@ namespace API.GameKittens.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("HungryImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdleImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -153,14 +156,12 @@ namespace API.GameKittens.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PetImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PetState")
                         .HasColumnType("bit");
 
                     b.Property<string>("ToHungryImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -186,11 +187,9 @@ namespace API.GameKittens.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -209,6 +208,21 @@ namespace API.GameKittens.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("STasks");
+                });
+
+            modelBuilder.Entity("AccessoryPet", b =>
+                {
+                    b.Property<int>("AvailableAccessoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AvailableInPetsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AvailableAccessoriesId", "AvailableInPetsId");
+
+                    b.HasIndex("AvailableInPetsId");
+
+                    b.ToTable("PetAccessories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -344,20 +358,12 @@ namespace API.GameKittens.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("API.GameKittens.Models.Accessory", b =>
-                {
-                    b.HasOne("API.GameKittens.Models.Pet", null)
-                        .WithMany("AvailablesAccessories")
-                        .HasForeignKey("PetId");
-                });
-
             modelBuilder.Entity("API.GameKittens.Models.Pet", b =>
                 {
                     b.HasOne("API.GameKittens.Models.Accessory", "Accessory")
-                        .WithMany()
+                        .WithMany("EquippedByPets")
                         .HasForeignKey("AccessoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("API.GameKittens.Models.ApplicationUser", "User")
                         .WithOne("Pet")
@@ -379,6 +385,21 @@ namespace API.GameKittens.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AccessoryPet", b =>
+                {
+                    b.HasOne("API.GameKittens.Models.Accessory", null)
+                        .WithMany()
+                        .HasForeignKey("AvailableAccessoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.GameKittens.Models.Pet", null)
+                        .WithMany()
+                        .HasForeignKey("AvailableInPetsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -432,17 +453,17 @@ namespace API.GameKittens.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("API.GameKittens.Models.Accessory", b =>
+                {
+                    b.Navigation("EquippedByPets");
+                });
+
             modelBuilder.Entity("API.GameKittens.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Pet")
                         .IsRequired();
 
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("API.GameKittens.Models.Pet", b =>
-                {
-                    b.Navigation("AvailablesAccessories");
                 });
 #pragma warning restore 612, 618
         }

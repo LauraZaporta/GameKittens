@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.GameKittens.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class AccessoriesRelationsUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Accessories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accessories", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -162,41 +177,6 @@ namespace API.GameKittens.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "STasks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ValidationVotes = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_STasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_STasks_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Accessories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PetId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Accessories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pets",
                 columns: table => new
                 {
@@ -210,8 +190,8 @@ namespace API.GameKittens.Migrations
                     PetImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ToHungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccessoryId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AccessoryId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,18 +201,61 @@ namespace API.GameKittens.Migrations
                         column: x => x.AccessoryId,
                         principalTable: "Accessories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Pets_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Accessories_PetId",
-                table: "Accessories",
-                column: "PetId");
+            migrationBuilder.CreateTable(
+                name: "STasks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ValidationVotes = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_STasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_STasks_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PetAccessories",
+                columns: table => new
+                {
+                    AvailableAccessoriesId = table.Column<int>(type: "int", nullable: false),
+                    AvailableInPetsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PetAccessories", x => new { x.AvailableAccessoriesId, x.AvailableInPetsId });
+                    table.ForeignKey(
+                        name: "FK_PetAccessories_Accessories_AvailableAccessoriesId",
+                        column: x => x.AvailableAccessoriesId,
+                        principalTable: "Accessories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetAccessories_Pets_AvailableInPetsId",
+                        column: x => x.AvailableInPetsId,
+                        principalTable: "Pets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -274,6 +297,11 @@ namespace API.GameKittens.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PetAccessories_AvailableInPetsId",
+                table: "PetAccessories",
+                column: "AvailableInPetsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pets_AccessoryId",
                 table: "Pets",
                 column: "AccessoryId");
@@ -281,28 +309,18 @@ namespace API.GameKittens.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Pets_UserId",
                 table: "Pets",
-                column: "UserId");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_STasks_UserId",
                 table: "STasks",
                 column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Accessories_Pets_PetId",
-                table: "Accessories",
-                column: "PetId",
-                principalTable: "Pets",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Accessories_Pets_PetId",
-                table: "Accessories");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -317,6 +335,9 @@ namespace API.GameKittens.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "PetAccessories");
 
             migrationBuilder.DropTable(
                 name: "STasks");

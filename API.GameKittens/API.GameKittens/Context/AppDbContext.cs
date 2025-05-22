@@ -29,6 +29,18 @@ namespace API.GameKittens.Context
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            // Relación: Pet -> Accessory (equipado)
+            modelBuilder.Entity<Pet>()
+                .HasOne(p => p.Accessory)
+                .WithMany(a => a.EquippedByPets)
+                .HasForeignKey(p => p.AccessoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Relación: Pet -> Accessory (disponibles - muchos a muchos)
+            modelBuilder.Entity<Pet>()
+                .HasMany(p => p.AvailableAccessories)
+                .WithMany(a => a.AvailableInPets)
+                .UsingEntity(j => j.ToTable("PetAccessories"));  // Tabla intermedia
         }
     }
 }
