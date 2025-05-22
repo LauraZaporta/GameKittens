@@ -28,14 +28,15 @@ class VMRank : ViewModel() {
             "987654321",
             "@gmail.com",
             "hola12345",
-            0,
+            3,
             0)
 
-        MapEmployeeToUserRank(listOf(sampleEmployee, sampleEmployee2))
+        MapAndTopEmployeesToUserRank(listOf(sampleEmployee, sampleEmployee2))
     }
 
-    private fun MapEmployeeToUserRank(employees: List<Employee>){
-        topUsers.value = employees.map { e ->
+    private fun MapAndTopEmployeesToUserRank(employees: List<Employee>){
+        val topTenEmployees = employees.sortedByDescending { it.points }.take(10)
+        topUsers.value = topTenEmployees.map { e ->
             UserRank(
                 userName = e.userName,
                 points = e.points
