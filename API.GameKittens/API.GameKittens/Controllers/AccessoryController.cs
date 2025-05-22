@@ -27,6 +27,7 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AccessoryGetDTO>>> GetAllAccessories()
         {
@@ -43,6 +44,7 @@ namespace API.GameKittens.Controllers
             return Ok(accessories);
         }
 
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AccessoryGetDTO>> GetAccessoryById(int id)
         {
@@ -57,6 +59,7 @@ namespace API.GameKittens.Controllers
         }
 
 
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Accessory>> PostAccessory(AccessoryInsertDTO accessoryDTO)
         {
@@ -82,6 +85,7 @@ namespace API.GameKittens.Controllers
             //return Ok(film);
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAccessory(int id)
         {
@@ -102,6 +106,7 @@ namespace API.GameKittens.Controllers
             return Ok("Successful delete");
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpPut("put/{id}")]
         public async Task<IActionResult> PutAccessory(int id, Accessory accessory)
         {

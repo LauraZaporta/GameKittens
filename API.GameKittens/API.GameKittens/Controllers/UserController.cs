@@ -27,6 +27,7 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserGetDTO>>> GetAllUsers()
         {
@@ -43,6 +44,7 @@ namespace API.GameKittens.Controllers
             return Ok(users);
         }
 
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserGetDTO>> GetUserById(string id)
         {
@@ -63,6 +65,7 @@ namespace API.GameKittens.Controllers
             return Ok(userDTO);
         }
 
+        //[Authorize(Roles = "Admin, Boss")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -78,6 +81,7 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
+        //[Authorize(Roles = "Admin, Boss")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(string id, ApplicationUser user)
         {

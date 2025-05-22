@@ -26,7 +26,7 @@ namespace API.GameKittens.Controllers
             return Ok("Helo client");
         }
 
-
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PetGetDTO>>> GetAllPets()
         {
@@ -50,6 +50,7 @@ namespace API.GameKittens.Controllers
             return Ok(pets);
         }
 
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Pet>> GetPetById(int id)
         {
@@ -63,6 +64,7 @@ namespace API.GameKittens.Controllers
             return Ok(pet);
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Pet>> PostPet(PetInsertDTO petDTO)
         {
@@ -104,6 +106,7 @@ namespace API.GameKittens.Controllers
             //return Ok(pet);
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeletePet(int id)
         {
@@ -124,6 +127,7 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
+        //[Authorize(Roles = "Admin, User")]
         [HttpPut("put/{id}")]
         public async Task<IActionResult> PutPet(int id, Pet pet)
         {
