@@ -9,6 +9,6 @@ class Employee (
     val phone: String,
     val email: String,
     val password: String,
-    val points: Int,
-    val coins: Int
+    val points: Int, // Rank
+    val coins: Int // Shop
 )

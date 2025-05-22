@@ -22,3 +22,7 @@ object ColorConstants {
     val colorGreen = Color(0XFF74C47C)
     val colorRed = Color(0XFFCF5753)
 }
+
+val brush = Brush.linearGradient(listOf(ColorConstants.colorCottonPink,
+    Color.White,
+    ColorConstants.colorCottonPink))
