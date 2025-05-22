@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBarItem
@@ -171,5 +172,36 @@ fun GenerateRowPetInfo(petName: String, petState: String, color: Color){
             fontFamily = getFontFamily(),
             color = color
         )
+    }
+}
+
+@Composable
+fun GenerateRankCard(user: String, points: String){
+    Card(
+        modifier = Modifier
+            .width(500.dp)
+            .height(50.dp)
+            .padding(bottom = 15.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(brush),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                user,
+                modifier = Modifier.padding(start = 60.dp),
+                color = ColorConstants.colorGrey,
+                fontFamily = getFontFamily()
+            )
+            Text(
+                points,
+                modifier = Modifier.padding(end = 60.dp),
+                color = ColorConstants.colorGrey,
+                fontFamily = getFontFamily()
+            )
+        }
     }
 }

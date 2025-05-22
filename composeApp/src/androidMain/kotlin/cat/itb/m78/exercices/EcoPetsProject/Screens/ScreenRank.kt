@@ -1,87 +1,70 @@
 package cat.itb.m78.exercices.EcoPetsProject.Screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserRank
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
-import cat.itb.m78.exercices.EcoPetsProject.ViewModels.RankViewModel
-import cat.itb.m78.exercices.EcoPetsProject.ViewModels.UserPoints
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateRankCard
+import cat.itb.m78.exercices.EcoPetsProject.Others.brush
+import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
+import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMRank
 import kotlinx.serialization.Serializable
-
-@Serializable
-data object Rank
 
 @Composable
 fun ScreenRank(){
-    val viewModel = viewModel{ RankViewModel() }
+    val viewModel = viewModel{ VMRank() }
 
-    ScreenRankArguments(ranking = viewModel.ranking)
+    ScreenRankArguments(ranking = viewModel.topUsers.value)
 }
 
 @Composable
 fun ScreenRankArguments(
-    ranking: List<String>
+    ranking: List<UserRank>
 ){
-    Card(
-        modifier = Modifier.fillMaxWidth().padding(20.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardColors(
-            containerColor = ColorConstants.colorJamPink,
-            contentColor = Color.Black,
-            disabledContainerColor = ColorConstants.colorJamPink,
-            disabledContentColor = Color.Black
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)
+            .background(color = ColorConstants.colorCottonPink, shape = RoundedCornerShape(20.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top)
+    {
+        Text("Ranking",
+            modifier = Modifier.padding(top = 40.dp),
+            color = ColorConstants.colorGrey,
+            fontSize = 14.em,
+            fontFamily = getFontFamily()
         )
-    ){
-    Column (modifier = Modifier
-        .fillMaxSize()
-        .background(ColorConstants.colorJamPink),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        LazyColumn (horizontalAlignment = Alignment.CenterHorizontally) {
-            item{
-                Text(ranking[0],
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight(800),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(15.dp)
-                )
-                Spacer(modifier = Modifier.size(20.dp))
-            }
-            for (i in 1..ranking.indices.last){
-                item {
-                    Text(ranking[i],
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight(700),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.size(15.dp))
-                }
+        Spacer(Modifier.height(15.dp))
+        LazyColumn(modifier = Modifier.padding(15.dp)) {
+            items(ranking) { user ->
+                GenerateRankCard("${ranking.indexOf(user)+1}    ${user.userName}", user.points.toString()+" S")
             }
         }
     }
-        }
 }
