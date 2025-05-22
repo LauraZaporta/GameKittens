@@ -42,7 +42,7 @@ namespace API.GameKittens.Controllers
                     PetImage = p.PetImage,
                     HungryImage = p.HungryImage,
                     ToHungryImage = p.ToHungryImage,
-                    AccessoryId = p.Accessory.Id,
+                    AccessoryId = p.AccessoryId,
                     UserId = p.UserId
                 })
                 .ToListAsync();
@@ -68,16 +68,10 @@ namespace API.GameKittens.Controllers
         {
             // Verificar si el user existeix
             var user = await _context.Users.FindAsync(petDTO.UserId);
-            // Verificar si el accessori existeix
-            var accessory = await _context.Accessories.FindAsync(petDTO.AccessoryId);
             
             if (user == null)
             {
                 return NotFound("User not found.");
-            }
-            if (accessory == null)
-            {
-                return NotFound("Accessory not found.");
             }
 
 
@@ -107,7 +101,7 @@ namespace API.GameKittens.Controllers
 
 
             return CreatedAtAction(nameof(GetPetById), new { id = pet.Id }, pet);
-            //return Ok(film);
+            //return Ok(pet);
         }
 
         [HttpDelete("delete/{id}")]
@@ -165,3 +159,7 @@ namespace API.GameKittens.Controllers
         }
     }
 }
+
+/*
+ HttpGet(id) GetUserById
+ */

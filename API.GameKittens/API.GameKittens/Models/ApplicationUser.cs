@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.GameKittens.Models
 {
@@ -14,6 +15,7 @@ namespace API.GameKittens.Models
         public List<STask> Tasks { get; set; }
 
         // 1:1 con mascota
+        [JsonIgnore]
         public Pet Pet { get; set; }
     }
 }

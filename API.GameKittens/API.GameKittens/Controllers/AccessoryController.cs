@@ -3,6 +3,7 @@ using API.GameKittens.DTO;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -98,7 +99,7 @@ namespace API.GameKittens.Controllers
             {
                 return BadRequest(ex);
             }
-            return NoContent();
+            return Ok("Successful delete");
         }
 
         [HttpPut("put/{id}")]
@@ -127,7 +128,7 @@ namespace API.GameKittens.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         private bool AccessoryExists(int id)

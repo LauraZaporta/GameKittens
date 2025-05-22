@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 using API.GameKittens.Context;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,12 @@ public class Program
         //Afegim DbContext
         var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
         object value = builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+        // Json Serializer
+        /*builder.Services.AddControllers().AddJsonOptions(x =>
+        {
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });*/
 
         // Identity
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

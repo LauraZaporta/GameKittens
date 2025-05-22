@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace API.GameKittens.Models
 {
@@ -13,23 +14,26 @@ namespace API.GameKittens.Models
         public string Name { get; set; }
         public bool PetState { get; set; }
         public int Hunger { get; set; }
-        public string IdleImage { get; set; }
-        public string PetImage { get; set; }
-        public string HungryImage { get; set; }
-        public string ToHungryImage { get; set; }
+        public string? IdleImage { get; set; }
+        public string? PetImage { get; set; }
+        public string? HungryImage { get; set; }
+        public string? ToHungryImage { get; set; }
 
-        // FK a Accessory
-        public int AccessoryId { get; set; }
-
+        // Relación muchos-a-uno (opcional)
+        public int? AccessoryId { get; set; }
+        
         [ForeignKey("AccessoryId")]
-        public Accessory Accessory { get; set; }
+        [JsonIgnore]
+        public Accessory? Accessory { get; set; }  // Accesorio equipado
 
-        // Lista de accesorios disponibles (no relacionada directamente)
-        public List<Accessory> AvailablesAccessories { get; set; }
+        // Relación muchos-a-muchos
+        [JsonIgnore]
+        public List<Accessory> AvailableAccessories { get; set; } = new();
 
         // FK to ApplicationUser (1:1)
         public string UserId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        [JsonIgnore]
+        public ApplicationUser? User { get; set; }
     }
 }

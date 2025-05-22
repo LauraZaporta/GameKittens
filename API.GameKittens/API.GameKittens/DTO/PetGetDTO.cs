@@ -12,7 +12,7 @@
         public string HungryImage { get; set; }
         public string ToHungryImage { get; set; }
 
-        public int AccessoryId { get; set; }
+        public int? AccessoryId { get; set; }
         public string UserId { get; set; }
     }
 }
