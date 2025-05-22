@@ -8,5 +8,5 @@ class UserProfile (
     val phone: String,
     val email: String,
     val petName: String,
-    val petHunger: String
+    val petHunger: Int
 )

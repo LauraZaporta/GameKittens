@@ -76,7 +76,7 @@ fun ScreenListTasksArguments(
 
     val filteredTasks = tasks.filter {it.employee.userName.contains(stringFilter.value, ignoreCase = true)}
 
-    Box(modifier = Modifier.background(ColorConstants.colorWhiteNotWhite).fillMaxSize())
+    Box(modifier = Modifier.fillMaxSize())
     {
         Button(
         modifier = Modifier.padding(10.dp).align(Alignment.BottomEnd),

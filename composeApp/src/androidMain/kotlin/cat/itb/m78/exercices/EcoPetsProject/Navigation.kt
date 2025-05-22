@@ -77,7 +77,7 @@ fun Navigation(){
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(ColorConstants.colorVanilla),
+                .background(ColorConstants.colorWhiteNotWhite),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

@@ -75,7 +75,7 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().background(ColorConstants.colorWhiteNotWhite),
+    Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally)
     {

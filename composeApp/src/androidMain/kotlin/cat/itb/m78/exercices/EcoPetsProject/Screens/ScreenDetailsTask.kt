@@ -42,8 +42,7 @@ fun ScreenDetailsTask(idTask : Int){
             dislike = viewModel::dislike)
     }
     else {
-        Column(modifier = Modifier.fillMaxSize()
-                .background(ColorConstants.colorWhiteNotWhite),
+        Column(modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center)
         {

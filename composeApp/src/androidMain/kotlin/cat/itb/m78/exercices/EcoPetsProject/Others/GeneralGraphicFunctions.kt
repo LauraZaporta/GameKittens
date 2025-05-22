@@ -1,5 +1,6 @@
 package cat.itb.m78.exercices.EcoPetsProject.Others
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -8,6 +9,8 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -17,8 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 data class NavigationBarItem(
     val text: String,
@@ -135,6 +141,35 @@ fun GenerateLoginField(
             icon,
             50,
             10
+        )
+    }
+}
+
+@Composable
+fun GenerateRowEmployeeInfo(text: String, icon: ImageVector){
+    Row (modifier = Modifier.padding(start = 10.dp, end = 10.dp).width(230.dp),
+        horizontalArrangement = Arrangement.Start){
+        Icon(icon, contentDescription = null)
+        Text(" | $text",
+            fontFamily = getFontFamily(),
+            fontSize = 3.5.em,
+            color = ColorConstants.colorGrey
+        )
+    }
+}
+
+@Composable
+fun GenerateRowPetInfo(petName: String, petState: String, color: Color){
+    Row{
+        Text("Your pet $petName",
+            fontSize = 20.sp,
+            fontFamily = getFontFamily(),
+            color = Color.White
+        )
+        Text(" $petState",
+            fontSize = 20.sp,
+            fontFamily = getFontFamily(),
+            color = color
         )
     }
 }

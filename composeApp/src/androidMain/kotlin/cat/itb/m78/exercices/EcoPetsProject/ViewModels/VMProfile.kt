@@ -7,55 +7,49 @@ import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Pet
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserProfile
 
-class ProfileViewModel : ViewModel(){
-    val user: MutableState<UserProfile?> = mutableStateOf(null)
-    val employees: MutableState<List<Employee>?> = mutableStateOf(null)
-    val pets: MutableState<List<Pet>?> = mutableStateOf(null)
-    val attributes = mutableListOf("", "", "", "", "", "", "")
-
+class VMProfile(userId: String?) : ViewModel(){
+    val user = mutableStateOf<UserProfile?>(null)
+    val isPetHungry = mutableStateOf<Boolean?>(null)
 
     init {
-        //asks for the employees and pets list to the API
-    }
+        //ask for employee with id API
+        val currentEmployee = Employee("12345",
+            "HMiku",
+            "Hola",
+            "Adéu",
+            "78230984Z",
+            "987654321",
+            "@gmail.com",
+            "hola12345",
+            0,
+            0)
+        //ask for employee's Pet API
+        val employeePet = Pet(
+            id = 1,
+            animal = 3, // per exemple, un gat
+            name = "Mixa",
+            beingPat = false,
+            hunger = 0,
+            prop = 2, // suposem que és de la província 2
+            petBeingPatUri = "https://example.com/images/mixa-being-pat.png",
+            petImageUri = "https://example.com/images/mixa.png",
+            hungerUri = "https://example.com/images/mixa-hungry.png",
+            aLotOfHungerUri = "https://example.com/images/mixa-very-hungry.png",
+            employeeId = "emp123"
+        )
 
-    fun getCurrentUser(/*userId: String*/){
-        val userId = "" //it should arrive as an argument to the function, not be declared in it
-        if (employees.value == null && pets.value == null){
-            user.value = UserProfile(
-                userName = "Paquito123",
-                nameAndSurname = "Patines, Paco",
-                dni = "12345678A",
-                phone = "123456789",
-                email = "hola@gamil.com",
-                petName = "Sr Pantuflas",
-                petHunger = "9"
-            )
+        user.value = UserProfile(
+            userName = currentEmployee.userName,
+            nameAndSurname = "${currentEmployee.name} ${currentEmployee.surname}",
+            dni = currentEmployee.dni,
+            phone = currentEmployee.phone,
+            email = currentEmployee.email,
+            petName = employeePet.name,
+            petHunger = employeePet.hunger
+        )
 
-        } else {
-            for (emp in employees.value!!) {
-                if (emp.id == userId) {
-                    attributes[0] = emp.userName
-                    attributes[1] = "${emp.surname}, ${emp.name}"
-                    attributes[2] = emp.dni
-                    attributes[3] = emp.phone.toString()
-                    attributes[4] = emp.email
-                }
-            }
-            for (p in pets.value!!) {
-                if (p.employeeId == userId) {
-                    attributes[5] = p.name
-                    attributes[6] = p.hunger.toString()
-                }
-            }
-            user.value = UserProfile(
-                userName = attributes[0],
-                nameAndSurname = attributes[1],
-                dni = attributes[2],
-                phone = attributes[3],
-                email = attributes[4],
-                petName = attributes[5],
-                petHunger = attributes[6]
-            )
-        }
+        if (user.value!!.petHunger < 3) isPetHungry.value = true
+        else if (user.value!!.petHunger > 7) isPetHungry.value = false
+        else isPetHungry.value = null
     }
 }

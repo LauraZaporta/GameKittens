@@ -16,8 +16,8 @@ class SendPointsViewModel : ViewModel() {
     init {
         //select a list of employees
         employees.value = listOf(
-            Employee("1", "jose", "", "", "", 0, "", "", 2, 0),
-            Employee("2", "paco", "", "", "", 0, "", "", 4, 0)
+            Employee("1", "jose", "", "", "", "0", "", "", 2, 0),
+            Employee("2", "paco", "", "", "", "0", "", "", 4, 0)
         )
         for (emp in employees.value!!){
             namesList.add(emp.userName)

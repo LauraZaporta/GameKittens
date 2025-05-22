@@ -6,7 +6,7 @@ class Employee (
     val name: String,
     val surname: String,
     val dni: String,
-    val phone: Int,
+    val phone: String,
     val email: String,
     val password: String,
     val points: Int,
