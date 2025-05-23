@@ -238,7 +238,7 @@ fun GenerateSearchableDropdown(text: MutableState<String>, employees: List<Emplo
                     if (it.isEmpty()) userChosen = false
                 },
                 label = { Text("User to send points") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.width(300.dp),
                 trailingIcon = {
                     if (expanded) {
                         Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = "Collapse")
@@ -250,7 +250,7 @@ fun GenerateSearchableDropdown(text: MutableState<String>, employees: List<Emplo
 
             ExposedDropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { }
             ) {
                 filteredEmployees.forEach { emp ->
                     DropdownMenuItem(
