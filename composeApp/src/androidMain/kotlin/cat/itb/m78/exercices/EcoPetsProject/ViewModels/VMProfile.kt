@@ -29,8 +29,8 @@ class VMProfile(userId: String?) : ViewModel(){
             animal = 3, // per exemple, un gat
             name = "Mixa",
             beingPat = false,
-            hunger = 0,
-            prop = 2, // suposem que és de la província 2
+            hunger = mutableStateOf(0),
+            prop = mutableStateOf(2), // suposem que és de la província 2
             petBeingPatUri = "https://example.com/images/mixa-being-pat.png",
             petImageUri = "https://example.com/images/mixa.png",
             hungerUri = "https://example.com/images/mixa-hungry.png",
@@ -45,7 +45,7 @@ class VMProfile(userId: String?) : ViewModel(){
             phone = currentEmployee.phone,
             email = currentEmployee.email,
             petName = employeePet.name,
-            petHunger = employeePet.hunger
+            petHunger = employeePet.hunger.value
         )
 
         if (user.value!!.petHunger < 3) isPetHungry.value = true
