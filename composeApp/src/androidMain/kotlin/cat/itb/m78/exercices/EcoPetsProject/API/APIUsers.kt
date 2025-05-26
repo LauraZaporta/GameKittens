@@ -1,5 +1,6 @@
 package cat.itb.m78.exercices.EcoPetsProject.API
 
+import cat.itb.m78.exercices.EcoPetsProject.settings
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -11,6 +12,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import io.ktor.client.request.*
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 
 
@@ -49,9 +51,19 @@ class APIUsers() {
 
     // Get functions
     suspend fun listUsers(): List<UserData> {
-        return client.get("$baseUrl/user").body()
+        val token: String? = settings.getStringOrNull("token")
+        return client.get("$baseUrl/user") {
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }.body()
     }
     suspend fun detailUser(id: String): UserData {
-        return client.get("$baseUrl/user/$id").body()
+        val token: String? = settings.getStringOrNull("token")
+        return client.get("$baseUrl/user/$id") {
+            headers {
+                append(HttpHeaders.Authorization, "Bearer $token")
+            }
+        }.body()
     }
 }

@@ -49,7 +49,7 @@ fun InitialNavigation(){
             ScreenLogin { navController.navigate(Destination.NavigationApp) }
             }
         composable<Destination.NavigationApp> {
-            Navigation()
+            APITEST()
         }
     }
 }
