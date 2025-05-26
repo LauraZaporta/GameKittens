@@ -26,7 +26,7 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<STaskGetDTO>>> GetAllSTasks()
         {
@@ -46,7 +46,7 @@ namespace API.GameKittens.Controllers
             return Ok(sTasks);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<STaskGetDTO>> GetSTaskById(int id)
         {
@@ -60,7 +60,7 @@ namespace API.GameKittens.Controllers
             return Ok(task);
         }
 
-        //[Authorize(Roles = "User, Admin")]
+        [Authorize(Roles = "User, Admin")]
         [HttpPost]
         public async Task<ActionResult<STask>> PostSTask(STaskInsertDTO staskDTO)
         {
@@ -95,7 +95,7 @@ namespace API.GameKittens.Controllers
             //return Ok(sTask);
         }
 
-        //[Authorize(Roles = "Admin, Boss")]
+        [Authorize(Roles = "Admin, Boss")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteSTask(int id)
         {
@@ -116,7 +116,7 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("put/{id}")]
         public async Task<IActionResult> PutSTask(int id, STask sTask)
         {

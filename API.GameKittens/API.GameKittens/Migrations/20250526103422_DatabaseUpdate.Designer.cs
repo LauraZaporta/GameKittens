@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.GameKittens.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250522071555_AccessoriesRelationsUpdate")]
-    partial class AccessoriesRelationsUpdate
+    [Migration("20250526103422_DatabaseUpdate")]
+    partial class DatabaseUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,6 @@ namespace API.GameKittens.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -146,15 +145,10 @@ namespace API.GameKittens.Migrations
                     b.Property<int>("Animal")
                         .HasColumnType("int");
 
-                    b.Property<int>("Hunger")
-                        .HasColumnType("int");
-
                     b.Property<string>("HungryImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdleImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -162,14 +156,12 @@ namespace API.GameKittens.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PetImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PetState")
                         .HasColumnType("bit");
 
                     b.Property<string>("ToHungryImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -195,11 +187,9 @@ namespace API.GameKittens.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

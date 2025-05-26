@@ -27,15 +27,20 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserGetDTO>>> GetAllUsers()
         {
             var users = await _context.Users
                 .Select(u => new UserGetDTO
                 {
+                    Id = u.Id,
+                    Username = u.UserName,
                     Name = u.Name,
                     Surename = u.Surename,
+                    DNI = u.DNI,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber,
                     Money = u.Money,
                     Points = u.Points
                 })
@@ -44,7 +49,7 @@ namespace API.GameKittens.Controllers
             return Ok(users);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserGetDTO>> GetUserById(string id)
         {
@@ -57,15 +62,22 @@ namespace API.GameKittens.Controllers
 
             var userDTO = new UserGetDTO
             {
+                Id = user.Id,
+                Username = user.UserName,
                 Name = user.Name,
-                Surename = user.Surename
+                Surename = user.Surename,
+                DNI = user.DNI,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Money = user.Money,
+                Points = user.Points
 
             };
 
             return Ok(userDTO);
         }
 
-        //[Authorize(Roles = "Admin, Boss")]
+        [Authorize(Roles = "Admin, Boss")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -81,7 +93,7 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
-        //[Authorize(Roles = "Admin, Boss")]
+        [Authorize(Roles = "Admin, Boss")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(string id, ApplicationUser user)
         {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.GameKittens.Migrations
 {
     /// <inheritdoc />
-    public partial class AccessoriesRelationsUpdate : Migration
+    public partial class DatabaseUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace API.GameKittens.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -185,11 +185,10 @@ namespace API.GameKittens.Migrations
                     Animal = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PetState = table.Column<bool>(type: "bit", nullable: false),
-                    Hunger = table.Column<int>(type: "int", nullable: false),
-                    IdleImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PetImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ToHungryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdleImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PetImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HungryImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ToHungryImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccessoryId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -218,8 +217,8 @@ namespace API.GameKittens.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ValidationVotes = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
