@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,9 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
@@ -27,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +34,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Pet
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Prop
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
-import cat.itb.m78.exercices.EcoPetsProject.Others.NavigationBarItem
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.PetViewModel
 import coil3.compose.AsyncImage
 
@@ -45,13 +41,18 @@ import coil3.compose.AsyncImage
 fun ScreenPet(){
     val viewModel = viewModel{ PetViewModel() }
 
+    viewModel.checkPetHunger()
+    viewModel.checkPetBeingPat()
+
     ScreenPetArguments(
         pet = viewModel.pet.value!!,
         propsList = viewModel.accessoryList.value!!,
         petImage = viewModel.petImage.value,
         petProp = viewModel.petProp.value,
-        isPetHungry = viewModel.isPetHungry.value,
-        updatePetHunger = { viewModel.updatePetHunger(it) }
+        updatePetHunger = { viewModel.updatePetHunger() },
+        unlockNewProp = { viewModel.unlockNewProp(it) },
+        updatePetAccessory = { viewModel.updatePetAccessory(it) },
+        updateUserCoins = { viewModel.updateUserCoins(it) }
     )
 }
 
@@ -61,8 +62,10 @@ fun ScreenPetArguments(
     propsList: List<Prop>,
     petImage: String,
     petProp: String,
-    isPetHungry: Boolean?,
-    updatePetHunger: (Int) -> Unit
+    updatePetHunger: () -> Unit,
+    unlockNewProp: (Int) -> Unit,
+    updatePetAccessory: (Int) -> Unit,
+    updateUserCoins: (Int) -> Unit
 ){
     val showCloths = remember { mutableStateOf(false) }
 
@@ -82,16 +85,14 @@ fun ScreenPetArguments(
                 AsyncImage(
                     model = petImage,
                     contentDescription = "Pet image",
-                    modifier = Modifier.padding(5.dp).size(300.dp),
-                    contentScale = ContentScale.Crop
+                    modifier = Modifier.size(400.dp)
                 )
             }
             if (petProp != "") {
                 AsyncImage(
-                    model = petImage,
+                    model = petProp,
                     contentDescription = "Pet accessory",
-                    modifier = Modifier.padding(5.dp).size(300.dp),
-                    contentScale = ContentScale.Crop
+                    modifier = Modifier.size(400.dp)
                 )
             }
         }
@@ -100,11 +101,36 @@ fun ScreenPetArguments(
 
         if (showCloths.value){
             Row (
-                modifier = Modifier.fillMaxWidth().height(90.dp).background(ColorConstants.colorVanilla),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp)
+                    .background(ColorConstants.colorVanilla),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
                 LazyRow {
+                    item {
+                        Column (
+                            modifier = Modifier.padding(10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    updatePetAccessory(0)
+                                },
+                                modifier = Modifier.size(50.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Clear,
+                                    contentDescription = "no accessory",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .size(300.dp)
+                                )
+                            }
+                            Text("Remove", textAlign = TextAlign.Center)
+                        }
+                    }
                     for (p in propsList){
                         item {
                             Column (
@@ -113,18 +139,28 @@ fun ScreenPetArguments(
                             ){
                                 IconButton(
                                     onClick = {
-                                        updatePetHunger(-10)
+                                        if (p.unlocked.value){
+                                            updatePetAccessory(p.id)
+                                        } else {
+                                            unlockNewProp(p.id)
+                                            updateUserCoins(p.price)
+                                        }
                                     },
                                     modifier = Modifier.size(50.dp)
                                 ) {
                                     AsyncImage(
                                         model = p.imageUri,
                                         contentDescription = p.name,
-                                        modifier = Modifier.padding(5.dp).size(300.dp),
+                                        modifier = Modifier
+                                            .padding(5.dp)
+                                            .size(300.dp),
                                         contentScale = ContentScale.Crop
                                     )
                                 }
                                 Text(p.name, textAlign = TextAlign.Center)
+                                if (!p.unlocked.value) {
+                                    Text(" -${p.price} €", textAlign = TextAlign.Center)
+                                }
                             }
                         }
                     }
@@ -148,7 +184,9 @@ fun ScreenPetArguments(
         }
         else{
             Row (
-                modifier = Modifier.fillMaxWidth().height(90.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ){
@@ -168,15 +206,18 @@ fun ScreenPetArguments(
         }
 
         Row (
-            modifier = Modifier.fillMaxWidth().height(90.dp).background(ColorConstants.colorVanilla),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .background(ColorConstants.colorVanilla),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ){
             val hungerWidth = remember { mutableStateOf(0) }
-            if (pet.hunger < 10) { hungerWidth.value = 300 - pet.hunger * 30 }
-            else { hungerWidth.value = 15 }
+            if (pet.hunger.value < 10) { hungerWidth.value = 350 - pet.hunger.value * 35 }
+            else { hungerWidth.value = 20 }
 
-            if (pet.hunger < 3) {
+            if (pet.hunger.value < 3) {
                 Row(
                     modifier = Modifier
                         .background(ColorConstants.colorCottonPink)
@@ -184,9 +225,9 @@ fun ScreenPetArguments(
                         .width(hungerWidth.value.dp)
                         .height(30.dp)
                 ) {
-                    Text("${pet.hunger}")
+                    Text("${pet.hunger.value}", textAlign = TextAlign.Center)
                 }
-            } else if (pet.hunger < 7) {
+            } else if (pet.hunger.value < 7) {
                 Row(
                     modifier = Modifier
                         .background(ColorConstants.colorJamPink)
@@ -194,7 +235,7 @@ fun ScreenPetArguments(
                         .width(hungerWidth.value.dp)
                         .height(30.dp)
                 ) {
-                    Text("${pet.hunger}")
+                    Text("${pet.hunger.value}", textAlign = TextAlign.Center)
                 }
             } else {
                 Row(
@@ -204,16 +245,14 @@ fun ScreenPetArguments(
                         .width(hungerWidth.value.dp)
                         .height(30.dp)
                 ) {
-                    Text("${pet.hunger}")
+                    Text("${pet.hunger.value}", textAlign = TextAlign.Center)
                 }
             }
-
-
 
             Column {
                 IconButton(
                     onClick = {
-                        updatePetHunger(-10)
+                        updatePetHunger()
                     },
                     modifier = Modifier.size(50.dp)
                 ) {
