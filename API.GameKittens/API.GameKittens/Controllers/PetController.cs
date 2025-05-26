@@ -41,7 +41,6 @@ namespace API.GameKittens.Controllers
                     PetImage = p.PetImage,
                     HungryImage = p.HungryImage,
                     ToHungryImage = p.ToHungryImage,
-                    AccessoryId = p.AccessoryId,
                     UserId = p.UserId
                 })
                 .ToListAsync();
@@ -85,7 +84,6 @@ namespace API.GameKittens.Controllers
                 PetImage = petDTO.PetImage,
                 HungryImage = petDTO.HungryImage,
                 ToHungryImage = petDTO.ToHungryImage,
-                AccessoryId = petDTO.AccessoryId,
                 UserId = petDTO.UserId
             };
 

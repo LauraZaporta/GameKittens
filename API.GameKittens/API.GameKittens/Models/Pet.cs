@@ -19,17 +19,7 @@ namespace API.GameKittens.Models
         public string? HungryImage { get; set; }
         public string? ToHungryImage { get; set; }
 
-        // Relación muchos-a-uno (opcional)
-        public int? AccessoryId { get; set; }
         
-        [ForeignKey("AccessoryId")]
-        [JsonIgnore]
-        public Accessory? Accessory { get; set; }  // Accesorio equipado
-
-        // Relación muchos-a-muchos
-        [JsonIgnore]
-        public List<Accessory> AvailableAccessories { get; set; } = new();
-
         // FK to ApplicationUser (1:1)
         public string UserId { get; set; }
         [ForeignKey("UserId")]
