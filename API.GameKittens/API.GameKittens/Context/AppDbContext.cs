@@ -10,7 +10,7 @@ namespace API.GameKittens.Context
 
         public DbSet<STask> STasks { get; set; }
         public DbSet<Pet> Pets { get; set; }
-        public DbSet<Accessory> Accessories { get; set; }
+        //public DbSet<Accessory> Accessories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,8 @@ namespace API.GameKittens.Context
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            /*
             // Relación: Pet -> Accessory (equipado)
             modelBuilder.Entity<Pet>()
                 .HasOne(p => p.Accessory)
@@ -41,6 +43,8 @@ namespace API.GameKittens.Context
                 .HasMany(p => p.AvailableAccessories)
                 .WithMany(a => a.AvailableInPets)
                 .UsingEntity(j => j.ToTable("PetAccessories"));  // Tabla intermedia
+            */
+
         }
     }
 }
