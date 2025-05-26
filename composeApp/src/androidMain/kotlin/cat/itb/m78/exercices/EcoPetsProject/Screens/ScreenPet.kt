@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
@@ -108,6 +109,28 @@ fun ScreenPetArguments(
                 horizontalArrangement = Arrangement.End
             ) {
                 LazyRow {
+                    item {
+                        Column (
+                            modifier = Modifier.padding(10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            IconButton(
+                                onClick = {
+                                    updatePetAccessory(0)
+                                },
+                                modifier = Modifier.size(50.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.Clear,
+                                    contentDescription = "no accessory",
+                                    modifier = Modifier
+                                        .padding(5.dp)
+                                        .size(300.dp),
+                                )
+                            }
+                            Text("Anything", textAlign = TextAlign.Center)
+                        }
+                    }
                     for (p in propsList){
                         item {
                             Column (

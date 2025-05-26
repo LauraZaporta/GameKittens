@@ -27,7 +27,7 @@ class PetViewModel : ViewModel() {
             "Jibanyan",
             false,
             hunger = mutableIntStateOf(10),
-            prop = mutableIntStateOf(3),
+            prop = mutableIntStateOf(0),
             "https://www.models-resource.com/resources/big_icons/39/38901.png?updated=1587677584",
             "https://static.wikia.nocookie.net/youkaiwatch/images/2/2f/Jibanyan.png/revision/latest?cb=20230122075514&path-prefix=es",
             "https://static.wikia.nocookie.net/versus-connections/images/c/cb/Imgbin-yo-kai-watch-2-jibanyan-nintendo-3ds-nintendo-Lm9ha59tYnVq29vuADbVSAWS0.png/revision/latest?cb=20240211172618",
@@ -88,9 +88,13 @@ class PetViewModel : ViewModel() {
     }
 
     fun checkPetAccessory(){
-        for (prop in accessoryList.value!!){
-            if (prop.id == pet.value!!.prop.value){
-                petProp.value = prop.imageUri
+        if (pet.value!!.prop.value == 0){
+            petProp.value = ""
+        } else{
+            for (prop in accessoryList.value!!){
+                if (prop.id == pet.value!!.prop.value){
+                    petProp.value = prop.imageUri
+                }
             }
         }
     }
