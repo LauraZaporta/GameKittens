@@ -20,7 +20,6 @@ class VMProfile(userId: String?) : ViewModel(){
             "78230984Z",
             "987654321",
             "@gmail.com",
-            "hola12345",
             0,
             0)
         //ask for employee's Pet API
@@ -48,8 +47,8 @@ class VMProfile(userId: String?) : ViewModel(){
             petHunger = employeePet.hunger.value
         )
 
-        if (user.value!!.petHunger < 3) isPetHungry.value = true
-        else if (user.value!!.petHunger > 7) isPetHungry.value = false
+        if (user.value!!.petHunger < 3) isPetHungry.value = false
+        else if (user.value!!.petHunger > 7) isPetHungry.value = true
         else isPetHungry.value = null
     }
 }

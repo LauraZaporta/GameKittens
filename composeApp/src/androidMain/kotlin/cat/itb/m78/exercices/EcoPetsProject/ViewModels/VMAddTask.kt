@@ -21,7 +21,6 @@ class VMAddTask : ViewModel(){
             "78230984Z",
             "987654321",
             "@gmail.com",
-            "hola12345",
             0,
             0)
     }

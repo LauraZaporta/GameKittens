@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import cat.itb.m78.exercices.EcoPetsProject.Screens.APITEST
 import cat.itb.m78.exercices.EcoPetsProject.Screens.InitialNavigation
 
 class AppActivity : ComponentActivity() {

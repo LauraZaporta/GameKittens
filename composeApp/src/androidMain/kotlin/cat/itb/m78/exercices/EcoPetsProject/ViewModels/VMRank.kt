@@ -17,7 +17,6 @@ class VMRank : ViewModel() {
             "78230984Z",
             "987654321",
             "@gmail.com",
-            "hola12345",
             0,
             0)
         val sampleEmployee2 = Employee("12345",
@@ -27,7 +26,6 @@ class VMRank : ViewModel() {
             "78230984Z",
             "987654321",
             "@gmail.com",
-            "hola12345",
             3,
             0)
 

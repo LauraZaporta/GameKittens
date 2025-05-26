@@ -14,8 +14,8 @@ class VMSendPoints : ViewModel() {
     init {
         //select the list of employees API
         employees.value = listOf(
-            Employee("1", "jose", "", "", "", "0", "", "", 2, 0),
-            Employee("2", "paco", "", "", "", "0", "", "", 4, 0))
+            Employee("1", "jose", "", "", "", "0", "", 2, 0),
+            Employee("2", "paco", "", "", "", "0", "", 4, 0))
         employeesNames.value = employees.value.map { e -> e.userName }
     }
 

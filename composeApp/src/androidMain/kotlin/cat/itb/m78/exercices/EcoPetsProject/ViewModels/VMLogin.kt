@@ -2,6 +2,10 @@ package cat.itb.m78.exercices.EcoPetsProject.ViewModels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cat.itb.m78.exercices.EcoPetsProject.API.APIUsers
+import cat.itb.m78.exercices.EcoPetsProject.settings
+import kotlinx.coroutines.launch
 
 class VMLogin: ViewModel(){
     val email = mutableStateOf("")
@@ -13,17 +17,26 @@ class VMLogin: ViewModel(){
     fun changePasswordVisibility(){
         passwordShown.value = !passwordShown.value
     }
-    fun login(navigateToNavigationApp: () -> Unit){
-        // Codi a desenvolupar depenent de l'API
-        if (email.value != "" && password.value != ""){
-            validLogin.value = true
-            loginMessage.value = "Login successful!"
-            // S'assigna als settings l'id de l'usuari i es continua a l'app
-            navigateToNavigationApp()
-        }
-        else {
-            loginMessage.value = "All fields are required!"
-            validLogin.value = false
+    fun login(navigateToNavigationApp: () -> Unit) {
+        viewModelScope.launch {
+            if (email.value.isNotBlank() && password.value.isNotBlank()) {
+                try {
+                    val token = APIUsers().login(email.value, password.value)
+
+                    // Save the token
+                    settings.putString("token", token)
+
+                    loginMessage.value = "Login successful!"
+                    validLogin.value = true
+                    navigateToNavigationApp()
+                } catch (e: Exception) {
+                    loginMessage.value = "Login failed!"
+                    validLogin.value = false
+                }
+            } else {
+                loginMessage.value = "All fields are required!"
+                validLogin.value = false
+            }
         }
     }
 }

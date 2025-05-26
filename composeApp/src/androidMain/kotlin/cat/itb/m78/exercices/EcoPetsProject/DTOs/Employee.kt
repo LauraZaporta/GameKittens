@@ -8,7 +8,6 @@ class Employee (
     val dni: String,
     val phone: String,
     val email: String,
-    val password: String,
     val points: Int, // Rank
     val coins: Int // Shop
 )
