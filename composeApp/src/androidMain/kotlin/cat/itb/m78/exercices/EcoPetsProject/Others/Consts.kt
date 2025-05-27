@@ -27,4 +27,4 @@ val brush = Brush.linearGradient(listOf(ColorConstants.colorCottonPink,
     Color.White,
     ColorConstants.colorCottonPink))
 
-const val apiBaseUrl = "http://10.0.2.2:5294"
+const val apiBaseUrl = "https://apigamekittens2-c6e0h2cwcecxhsak.canadacentral-01.azurewebsites.net/api"

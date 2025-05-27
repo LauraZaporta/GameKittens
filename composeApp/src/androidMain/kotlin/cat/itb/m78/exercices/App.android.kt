@@ -14,10 +14,10 @@ class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { Navigation() }
+        setContent { InitialNavigation() }
     }
 }
 
 @Preview
 @Composable
-fun AppPreview() { Navigation() }
+fun AppPreview() { InitialNavigation() }

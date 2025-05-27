@@ -16,7 +16,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 
-
 @Serializable
 data class UserData(
     // Falta id
@@ -28,6 +27,7 @@ data class UserData(
 
 @Serializable
 data class LoginRequest(val email: String, val password: String)
+@Serializable
 data class LoginResponse(val token: String)
 
 class APIUsers() {
@@ -42,18 +42,18 @@ class APIUsers() {
 
     // Login
     suspend fun login(email: String, password: String): String {
-        val response: LoginResponse = client.post("$apiBaseUrl/auth/login") {
+        val token: String = client.post("$apiBaseUrl/Auth/login") {
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }.body()
 
-        return response.token
+        return token
     }
 
     // Get functions
     suspend fun listUsers(): List<UserData> {
         val token: String? = settings.getStringOrNull("token")
-        return client.get("$apiBaseUrl/user") {
+        return client.get("$apiBaseUrl/User") {
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }
