@@ -26,6 +26,10 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
+        /// <summary>
+        /// EndPoint to get all tasks from STask table
+        /// </summary>
+        /// <returns></returns>
         //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<STaskGetDTO>>> GetAllSTasks()
