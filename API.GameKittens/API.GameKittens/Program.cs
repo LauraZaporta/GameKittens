@@ -18,7 +18,6 @@ public class Program
         // Build delay
         await Task.Delay(3000);
 
-
         // Add services to the container.
 
         //Afegim DbContext
@@ -145,7 +144,9 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        //app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

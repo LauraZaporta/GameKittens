@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.GameKittens.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250526135808_DatabaseRestructure")]
-    partial class DatabaseRestructure
+    [Migration("20250527065612_Checkpoint")]
+    partial class Checkpoint
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
