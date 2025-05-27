@@ -13,9 +13,5 @@ namespace API.GameKittens.Models
 
         // 1:N con tareas
         public List<STask> Tasks { get; set; }
-
-        // 1:1 con mascota
-        [JsonIgnore]
-        public Pet Pet { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.GameKittens.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250526192836_LocalTest")]
-    partial class LocalTest
+    [Migration("20250527070702_DeletePets")]
+    partial class DeletePets
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,48 +106,6 @@ namespace API.GameKittens.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("API.GameKittens.Models.Pet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Animal")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HungryImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdleImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PetImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PetState")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ToHungryImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Pets");
                 });
 
             modelBuilder.Entity("API.GameKittens.Models.STask", b =>
@@ -315,17 +273,6 @@ namespace API.GameKittens.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("API.GameKittens.Models.Pet", b =>
-                {
-                    b.HasOne("API.GameKittens.Models.ApplicationUser", "User")
-                        .WithOne("Pet")
-                        .HasForeignKey("API.GameKittens.Models.Pet", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("API.GameKittens.Models.STask", b =>
                 {
                     b.HasOne("API.GameKittens.Models.ApplicationUser", "User")
@@ -390,9 +337,6 @@ namespace API.GameKittens.Migrations
 
             modelBuilder.Entity("API.GameKittens.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Pet")
-                        .IsRequired();
-
                     b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
