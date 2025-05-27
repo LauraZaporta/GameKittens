@@ -13,6 +13,7 @@ namespace API.GameKittens.Models
 
         // 1:N con tareas
         public List<STask> Tasks { get; set; }
+        public List<STask> VotedTasks { get; set; }
 
         // 1:1 con mascota
         [JsonIgnore]

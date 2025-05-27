@@ -191,6 +191,24 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [HttpGet("userTasks/{id}")]
+        public async Task<ActionResult<List<STaskGetDTO>>> GetSTaskByUserId(string id)
+        {
+            var tasks = await _context.STasks.Where(t => t.UserId == id).Select(t => new STaskGetDTO
+            {
+                Id = t.Id,
+                ValidationVotes = t.ValidationVotes,
+                Title = t.Title,
+                Description = t.Description,
+                ImageURL = $"{Request.Scheme}://{Request.Host}/{t.ImageURL}",
+                UserId = t.UserId,
+                UserName = $"{t.User.Name} + {t.User.Surename}"
+            }).ToListAsync();
+
+            return Ok(tasks);
+        }
+
         private bool STaskExists(int id)
         {
             return _context.STasks.Any(t => t.Id == id);
