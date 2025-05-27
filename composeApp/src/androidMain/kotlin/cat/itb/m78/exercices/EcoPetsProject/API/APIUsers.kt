@@ -9,12 +9,15 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.SerialName
+import android.util.Base64
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import io.ktor.client.request.*
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 @Serializable
 data class UserData(
@@ -40,12 +43,38 @@ class APIUsers() {
         }
     }
 
+    private fun decodeJwtPayload(token: String): String {
+        val parts = token.split(".")
+        if (parts.size != 3) throw IllegalArgumentException("Invalid JWT token format")
+        val payload = parts[1]
+
+        // Afegim padding si cal (Base64url -> Base64 compatible)
+        val fixedPayload = when (payload.length % 4) {
+            2 -> "$payload=="
+            3 -> "$payload="
+            else -> payload
+        }
+
+        val decodedBytes = Base64.decode(fixedPayload, Base64.URL_SAFE or Base64.NO_WRAP)
+        return String(decodedBytes, Charsets.UTF_8)
+    }
+
+
     // Login
     suspend fun login(email: String, password: String): String {
         val token: String = client.post("$apiBaseUrl/Auth/login") {
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }.body()
+
+        settings.putString("token", token)
+        val payloadJson = decodeJwtPayload(token)
+        val jsonObject = Json.parseToJsonElement(payloadJson).jsonObject
+        val userId = jsonObject["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]?.jsonPrimitive?.content
+
+        if (userId != null) {
+            settings.putString("key", userId)
+        }
 
         return token
     }
@@ -55,7 +84,7 @@ class APIUsers() {
         val token: String? = settings.getStringOrNull("token")
         return client.get("$apiBaseUrl/User") {
             headers {
-                append(HttpHeaders.Authorization, "Bearer $token")
+                bearerAuth(token!!)
             }
         }.body()
     }

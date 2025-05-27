@@ -16,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.API.APIUsers
 import cat.itb.m78.exercices.EcoPetsProject.API.UserData
+import cat.itb.m78.exercices.EcoPetsProject.settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,7 @@ fun APITEST() {
             items(viewModel.userList.value) { user ->
                 Text(user.name)
                 Text(user.surname)
+                Text(settings.getStringOrNull("key").toString())
             }
         }
     }
