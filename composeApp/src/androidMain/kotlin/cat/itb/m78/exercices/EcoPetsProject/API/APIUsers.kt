@@ -21,9 +21,13 @@ import kotlinx.serialization.json.jsonPrimitive
 
 @Serializable
 data class UserData(
-    // Falta id
+    @SerialName("id") val id: String,
+    @SerialName("username") val username: String,
     @SerialName("name") val name: String,
     @SerialName("surename") val surname: String,
+    @SerialName("dni") val dni: String,
+    @SerialName("email") val email: String,
+    @SerialName("phoneNumber") val phone: String,
     @SerialName("points") val points: Int,
     @SerialName("money") val money: Int
 )
