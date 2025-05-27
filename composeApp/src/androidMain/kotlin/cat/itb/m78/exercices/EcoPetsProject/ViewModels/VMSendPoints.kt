@@ -17,7 +17,7 @@ class VMSendPoints : ViewModel() {
         employees.value = listOf(
             Employee("1", "Peppa", "", "", "", "0", "", 2),
             Employee("2", "HMikua", "", "", "", "0", "", 4),
-            Employee("2", "Ratotaaaaaaaaaa", "", "", "", "0", "", 4)
+            Employee("2", "Ratotaaaaaaaaaa", "", "", "", "0", "", 4),
         )
         employeesNames.value = employees.value.map { e -> e.userName }
     }

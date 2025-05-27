@@ -131,7 +131,7 @@ fun ScreenSendPointsArguments(
                                             enabled = true,
                                             onClickLabel = "Clickable name",
                                             onClick = { userName.value = emp.userName
-                                            employeeSelected.value = true}
+                                                employeeSelected.value = true}
                                         )
                                 ) {
                                     Column(
