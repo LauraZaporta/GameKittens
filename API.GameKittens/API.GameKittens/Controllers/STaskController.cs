@@ -1,4 +1,5 @@
-﻿using API.GameKittens.Context;
+﻿using System.Threading.Tasks;
+using API.GameKittens.Context;
 using API.GameKittens.DTO;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -190,6 +191,53 @@ namespace API.GameKittens.Controllers
 
             return NoContent();
         }
+
+        [Authorize]
+        [HttpPost("like/{taskId}")]
+        public async Task<IActionResult> LikeTask(int taskId, string userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            var task = await _context.STasks.FindAsync(taskId);
+            if (task == null) return NotFound();
+
+            var existingVote = await _context.STaskVotes
+                .FirstOrDefaultAsync(v => v.TaskId == taskId && v.UserId == userId);
+
+            if (existingVote != null)
+                return BadRequest("You already voted for this task.");
+
+            _context.STaskVotes.Add(new STaskVote { UserId = userId, TaskId = taskId });
+            task.ValidationVotes += 1;
+            task.Validate = task.ValidationVotes > 0;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Vote added." });
+        }
+
+        [Authorize]
+        [HttpPost("dislike/{taskId}")]
+        public async Task<IActionResult> DislikeTask(int taskId, string userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            var task = await _context.STasks.FindAsync(taskId);
+            if (task == null) return NotFound();
+
+            var existingVote = await _context.STaskVotes
+                .FirstOrDefaultAsync(v => v.TaskId == taskId && v.UserId == userId);
+
+            if (existingVote == null)
+                return BadRequest("You haven't voted for this task.");
+
+            _context.STaskVotes.Remove(existingVote);
+            task.ValidationVotes -= 1;
+            task.Validate = task.ValidationVotes > 0;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Vote removed." });
+        }
+
 
         private bool STaskExists(int id)
         {

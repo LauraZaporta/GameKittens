@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.GameKittens.Migrations
 {
     /// <inheritdoc />
-    public partial class LocalTest : Migration
+    public partial class STaskVotesTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -162,32 +162,6 @@ namespace API.GameKittens.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pets",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Animal = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PetState = table.Column<bool>(type: "bit", nullable: false),
-                    IdleImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PetImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HungryImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ToHungryImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Pets_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "STasks",
                 columns: table => new
                 {
@@ -207,7 +181,33 @@ namespace API.GameKittens.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "STaskVotes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_STaskVotes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_STaskVotes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_STaskVotes_STasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "STasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -250,14 +250,18 @@ namespace API.GameKittens.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_UserId",
-                table: "Pets",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_STasks_UserId",
                 table: "STasks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_STaskVotes_TaskId",
+                table: "STaskVotes",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_STaskVotes_UserId",
+                table: "STaskVotes",
                 column: "UserId");
         }
 
@@ -280,13 +284,13 @@ namespace API.GameKittens.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Pets");
-
-            migrationBuilder.DropTable(
-                name: "STasks");
+                name: "STaskVotes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "STasks");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
