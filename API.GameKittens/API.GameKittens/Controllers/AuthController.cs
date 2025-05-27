@@ -55,8 +55,14 @@ namespace API.GameKittens.Controllers
                 Money = 0
             };
             var resultat = await _userManager.CreateAsync(usuari, model.Password);
+            var resultatRol = new IdentityResult();
 
             if (resultat.Succeeded)
+            {
+                resultatRol = await _userManager.AddToRoleAsync(usuari, "User");
+            }
+
+            if (resultat.Succeeded && resultatRol.Succeeded)
                 return Ok("Usuari registrat");
 
             return BadRequest(resultat.Errors);

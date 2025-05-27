@@ -9,6 +9,7 @@ namespace API.GameKittens.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<STask> STasks { get; set; }
+        public DbSet<STaskVote> STaskVotes { get; set; }
         //public DbSet<Pet> Pets { get; set; }
         //public DbSet<Accessory> Accessories { get; set; }
 
@@ -28,7 +29,20 @@ namespace API.GameKittens.Context
                 .HasMany(u => u.Tasks)
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            // Relación 1:N entre ApplicationUser y STaskVote
+            modelBuilder.Entity<STaskVote>()
+                .HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación 1:N entre STask y STaskVote
+            modelBuilder.Entity<STaskVote>()
+                .HasOne(v => v.Task)
+                .WithMany()
+                .HasForeignKey(v => v.TaskId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             /*
             // Relación: Pet -> Accessory (equipado)

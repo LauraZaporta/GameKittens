@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.GameKittens.Migrations
 {
     /// <inheritdoc />
-    public partial class DeletePets : Migration
+    public partial class STaskVotesTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -181,7 +181,33 @@ namespace API.GameKittens.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "STaskVotes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_STaskVotes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_STaskVotes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_STaskVotes_STasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "STasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -227,6 +253,16 @@ namespace API.GameKittens.Migrations
                 name: "IX_STasks_UserId",
                 table: "STasks",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_STaskVotes_TaskId",
+                table: "STaskVotes",
+                column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_STaskVotes_UserId",
+                table: "STaskVotes",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -248,10 +284,13 @@ namespace API.GameKittens.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "STasks");
+                name: "STaskVotes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "STasks");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
