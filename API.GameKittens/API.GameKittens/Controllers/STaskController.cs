@@ -211,7 +211,13 @@ namespace API.GameKittens.Controllers
 
             _context.STaskVotes.Add(new STaskVote { UserId = userId, TaskId = taskId });
             task.ValidationVotes += 1;
-            task.Validate = task.ValidationVotes > 0;
+            task.Validate = task.ValidationVotes > 3;
+
+            // Añadir 10 puntos si son mas de 3 votos
+            if (task.ValidationVotes > 3)
+            {
+                task.User.Points = task.User.Points + 10;
+            }
 
             await _context.SaveChangesAsync();
 
