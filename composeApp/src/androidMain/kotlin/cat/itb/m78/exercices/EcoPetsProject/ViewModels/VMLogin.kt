@@ -30,7 +30,7 @@ class VMLogin: ViewModel(){
                     validLogin.value = true
                     navigateToNavigationApp()
                 } catch (e: Exception) {
-                    loginMessage.value = "Login failed!"
+                    loginMessage.value = "Login failed! ${e.message}"
                     validLogin.value = false
                 }
             } else {

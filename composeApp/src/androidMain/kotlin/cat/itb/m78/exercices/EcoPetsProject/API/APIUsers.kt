@@ -1,5 +1,6 @@
 package cat.itb.m78.exercices.EcoPetsProject.API
 
+import cat.itb.m78.exercices.EcoPetsProject.Others.apiBaseUrl
 import cat.itb.m78.exercices.EcoPetsProject.settings
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -25,11 +26,11 @@ data class UserData(
     @SerialName("money") val money: Int
 )
 
+@Serializable
 data class LoginRequest(val email: String, val password: String)
 data class LoginResponse(val token: String)
 
 class APIUsers() {
-    private val baseUrl = "https://gamekittensapi-g5ezhadrc8bfgrgb.spaincentral-01.azurewebsites.net"
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
@@ -41,7 +42,7 @@ class APIUsers() {
 
     // Login
     suspend fun login(email: String, password: String): String {
-        val response: LoginResponse = client.post("$baseUrl/login") {
+        val response: LoginResponse = client.post("$apiBaseUrl/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }.body()
@@ -52,7 +53,7 @@ class APIUsers() {
     // Get functions
     suspend fun listUsers(): List<UserData> {
         val token: String? = settings.getStringOrNull("token")
-        return client.get("$baseUrl/user") {
+        return client.get("$apiBaseUrl/user") {
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }
@@ -60,7 +61,7 @@ class APIUsers() {
     }
     suspend fun detailUser(id: String): UserData {
         val token: String? = settings.getStringOrNull("token")
-        return client.get("$baseUrl/user/$id") {
+        return client.get("$apiBaseUrl/user/$id") {
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }

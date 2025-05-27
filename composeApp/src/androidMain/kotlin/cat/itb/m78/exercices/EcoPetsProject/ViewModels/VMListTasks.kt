@@ -24,7 +24,6 @@ class VMListTasks : ViewModel(){
             "78230984Z",
             "987654321",
             "@gmail.com",
-            0,
             0)
         val sampleEmployee2 = Employee("12345",
             "PeppaPig",
@@ -33,7 +32,6 @@ class VMListTasks : ViewModel(){
             "78230984Z",
             "987654321",
             "@gmail.com",
-            0,
             0)
         val sampleTask = Task(
             id = 1,

@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 
 class VMSendPoints : ViewModel() {
-    private val employeesNames = mutableStateOf<List<String>>(emptyList())
+    val employeesNames = mutableStateOf<List<String>>(emptyList())
+    val employeeSelected = mutableStateOf(false)
     val pointsToSend = mutableStateOf("")
     val employees = mutableStateOf<List<Employee>>(emptyList())
     val chosenUserName = mutableStateOf("")
@@ -14,8 +15,10 @@ class VMSendPoints : ViewModel() {
     init {
         //select the list of employees API
         employees.value = listOf(
-            Employee("1", "jose", "", "", "", "0", "", 2, 0),
-            Employee("2", "paco", "", "", "", "0", "", 4, 0))
+            Employee("1", "Peppa", "", "", "", "0", "", 2),
+            Employee("2", "HMikua", "", "", "", "0", "", 4),
+            Employee("2", "Ratotaaaaaaaaaa", "", "", "", "0", "", 4)
+        )
         employeesNames.value = employees.value.map { e -> e.userName }
     }
 

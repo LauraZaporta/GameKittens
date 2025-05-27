@@ -9,5 +9,4 @@ class Employee (
     val phone: String,
     val email: String,
     val points: Int, // Rank
-    val coins: Int // Shop
 )

@@ -17,7 +17,6 @@ class VMRank : ViewModel() {
             "78230984Z",
             "987654321",
             "@gmail.com",
-            0,
             0)
         val sampleEmployee2 = Employee("12345",
             "PeppaPig",
@@ -26,8 +25,7 @@ class VMRank : ViewModel() {
             "78230984Z",
             "987654321",
             "@gmail.com",
-            3,
-            0)
+            3)
 
         MapAndTopEmployeesToUserRank(listOf(sampleEmployee, sampleEmployee2))
     }

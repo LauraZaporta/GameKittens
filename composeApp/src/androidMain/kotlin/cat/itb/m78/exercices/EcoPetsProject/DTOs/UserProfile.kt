@@ -7,6 +7,4 @@ class UserProfile (
     val dni: String,
     val phone: String,
     val email: String,
-    val petName: String,
-    val petHunger: Int
 )

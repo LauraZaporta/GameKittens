@@ -29,7 +29,6 @@ import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenAddTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenCamera
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenDetailsTask
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
-import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenPet
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenProfile
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenRank
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenSendPoints
@@ -46,10 +45,6 @@ object Destination{
     @Serializable
     data object ScreenListTasks
     @Serializable
-    data object ScreenLogin
-    @Serializable
-    data object ScreenPet
-    @Serializable
     data object ScreenProfile
     @Serializable
     data object ScreenRank
@@ -63,7 +58,6 @@ fun Navigation(){
 
     val listNavElementsBottom = listOf(
         NavigationBarItem("Tasks", Icons.Default.Check) { navController.navigate(Destination.ScreenListTasks) },
-        NavigationBarItem("Pet", Icons.Default.FavoriteBorder) { navController.navigate(Destination.ScreenPet) },
         NavigationBarItem("Ranking", Icons.Default.Star) { navController.navigate(Destination.ScreenRank) }
     )
     val listNavElementsTop = listOf(
@@ -82,7 +76,7 @@ fun Navigation(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NavHost(navController = navController, startDestination = Destination.ScreenPet) {
+            NavHost(navController = navController, startDestination = Destination.ScreenListTasks) {
                 composable<Destination.ScreenAddTask> { backStack ->
                     val imageUriStr = backStack.savedStateHandle.get<String>(PHOTO_URI_KEY)
                     val imageUri = imageUriStr?.toUri()
@@ -101,10 +95,6 @@ fun Navigation(){
                 composable<Destination.ScreenListTasks> {
                     ScreenListTasks(navigateToScreenAddTask = {navController.navigate(Destination.ScreenAddTask)},
                         navigateToScreenDetailsTask = {navController.navigate(Destination.ScreenDetailsTask(it))})
-                }
-                composable<Destination.ScreenLogin> { }
-                composable<Destination.ScreenPet> {
-                    ScreenPet()
                 }
                 composable<Destination.ScreenProfile> {
                     ScreenProfile()

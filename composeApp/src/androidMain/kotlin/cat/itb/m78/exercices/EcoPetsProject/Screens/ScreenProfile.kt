@@ -33,7 +33,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserProfile
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateRowEmployeeInfo
-import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateRowPetInfo
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMProfile
 import cat.itb.m78.exercices.EcoPetsProject.settings
@@ -80,17 +79,6 @@ fun ScreenProfileArguments(user: UserProfile, isPetHungry: Boolean?){
                 GenerateRowEmployeeInfo("Phone: ${user.phone}", Icons.Default.Phone)
                 Spacer(Modifier.height(10.dp))
                 GenerateRowEmployeeInfo("Email: ${user.email}", Icons.Default.Email)
-            }
-        }
-        when (isPetHungry) {
-            false -> {
-                GenerateRowPetInfo(user.petName, "is thriving!", ColorConstants.colorGreen)
-            }
-            null -> {
-                GenerateRowPetInfo(user.petName, "is hungry!", ColorConstants.colorVanilla)
-            }
-            true -> {
-                GenerateRowPetInfo(user.petName, "is next to die!", Color.Black)
             }
         }
     }
