@@ -199,8 +199,12 @@ namespace API.GameKittens.Controllers
         [HttpPost("like/{taskId}")]
         public async Task<IActionResult> LikeTask(int taskId, string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
             var task = await _context.STasks.FindAsync(taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+            var targetUser = await _context.Users.FindAsync(task.UserId);
+
+
             if (task == null) return NotFound();
 
             var existingVote = await _context.STaskVotes
@@ -216,7 +220,7 @@ namespace API.GameKittens.Controllers
             // Añadir 10 puntos si son mas de 3 votos
             if (task.ValidationVotes > 3)
             {
-                task.User.Points = task.User.Points + 10;
+                task.User.Points = targetUser.Points + 10;
             }
 
             await _context.SaveChangesAsync();
