@@ -21,7 +21,7 @@ public class Program
         // Add services to the container.
 
         //Afegim DbContext
-        var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
+        var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
         object value = builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
         // Json Serializer
