@@ -123,6 +123,27 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
+        //[Authorize]
+        [HttpPost("GivePoints")]
+        public async Task<IActionResult> GivePoints([FromBody] GivePointsDTO dto)
+        {
+            var targetUser = await _context.Users.FindAsync(dto.TargetUserId);
+            if (targetUser == null)
+            {
+                return NotFound("Target user not found");
+            }
+
+            if (dto.PointsToGive <= 0)
+            {
+                return BadRequest("Points must be greater than zero");
+            }
+
+            targetUser.Points += dto.PointsToGive;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Points given successfully", newTotalPoints = targetUser.Points });
+        }
+
         private bool UserExists(string id)
         {
             return _context.Users.Any(u => u.Id == id);
