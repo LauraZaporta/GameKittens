@@ -8,7 +8,7 @@ namespace API.GameKittens.DTO
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string ImageURL { get; set; }
+        public IFormFile ImageURL { get; set; }
 
         // FK to ApplicationUser
         public string UserId { get; set; }

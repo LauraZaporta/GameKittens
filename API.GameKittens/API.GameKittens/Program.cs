@@ -18,11 +18,10 @@ public class Program
         // Build delay
         await Task.Delay(3000);
 
-
         // Add services to the container.
 
         //Afegim DbContext
-        var connectionString = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+        var connectionString = builder.Configuration.GetConnectionString("DevelopmentConnection");
         object value = builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
         // Json Serializer
@@ -145,7 +144,9 @@ public class Program
             app.UseSwaggerUI();
         }
 
-        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        //app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();

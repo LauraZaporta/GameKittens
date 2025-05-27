@@ -37,10 +37,10 @@ namespace API.GameKittens.Controllers
                     Animal = p.Animal,
                     Name = p.Name,
                     PetState = p.PetState,
-                    IdleImage = p.IdleImage,
-                    PetImage = p.PetImage,
-                    HungryImage = p.HungryImage,
-                    ToHungryImage = p.ToHungryImage,
+                    NormalImage = $"{Request.Scheme}://{Request.Host}/{p.IdleImage}",
+                    PetImage = $"{Request.Scheme}://{Request.Host}/{p.PetImage}",
+                    HungryImage = $"{Request.Scheme}://{Request.Host}/{p.HungryImage}",
+                    TooHungryImage = $"{Request.Scheme}://{Request.Host}/{p.ToHungryImage}",
                     UserId = p.UserId
                 })
                 .ToListAsync();
@@ -50,56 +50,130 @@ namespace API.GameKittens.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pet>> GetPetById(int id)
+        public async Task<ActionResult<PetGetDTO>> GetPetById(int id)
         {
-            var pet = await _context.Pets.FindAsync(id);
+            var p = await _context.Pets.FindAsync(id);
 
-            if (pet == null)
+            if (p == null)
             {
                 return NotFound();
             }
 
-            return Ok(pet);
+            PetGetDTO petGet = new PetGetDTO
+            {
+                Animal = p.Animal,
+                Name = p.Name,
+                PetState = p.PetState,
+                NormalImage = $"{Request.Scheme}://{Request.Host}/{p.IdleImage}",
+                PetImage = $"{Request.Scheme}://{Request.Host}/{p.PetImage}",
+                HungryImage = $"{Request.Scheme}://{Request.Host}/{p.HungryImage}",
+                TooHungryImage = $"{Request.Scheme}://{Request.Host}/{p.ToHungryImage}",
+                UserId = p.UserId
+            };
+
+            return Ok(petGet);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Pet>> PostPet(PetInsertDTO petDTO)
+        [Route("api/pets")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PetGetDTO>> PostPet([FromForm] PetInsertDTO petDTO)
         {
-            // Verificar si el user existeix
             var user = await _context.Users.FindAsync(petDTO.UserId);
-            
             if (user == null)
-            {
-                return NotFound("User not found.");
-            }
-
-
-            var pet = new Pet
-            {
-                Name = petDTO.Name,
-                Animal = petDTO.Animal,
-                PetState = petDTO.PetState,
-                IdleImage = petDTO.IdleImage,
-                PetImage = petDTO.PetImage,
-                HungryImage = petDTO.HungryImage,
-                ToHungryImage = petDTO.ToHungryImage,
-                UserId = petDTO.UserId
-            };
+                return NotFound(new { message = "Usuari no trobat." });
 
             try
             {
-                await _context.Pets.AddAsync(pet);
+                string normalImagePath = string.Empty;
+                string petImagePath = string.Empty;
+                string hungryImagePath = string.Empty;
+                string tooHungryImagePath = string.Empty;
+
+                var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                Directory.CreateDirectory(imagesFolder);
+
+                if (petDTO.NormalImage != null && petDTO.NormalImage.Length > 0)
+                {
+                    var uniqueName = Guid.NewGuid() + Path.GetExtension(petDTO.NormalImage.FileName);
+                    var fullPath = Path.Combine(imagesFolder, uniqueName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await petDTO.NormalImage.CopyToAsync(stream);
+                    }
+                    normalImagePath = Path.Combine("images", uniqueName).Replace("\\", "/");
+                }
+
+                if (petDTO.PetImage != null && petDTO.PetImage.Length > 0)
+                {
+                    var uniqueName = Guid.NewGuid() + Path.GetExtension(petDTO.PetImage.FileName);
+                    var fullPath = Path.Combine(imagesFolder, uniqueName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await petDTO.PetImage.CopyToAsync(stream);
+                    }
+                    petImagePath = Path.Combine("images", uniqueName).Replace("\\", "/");
+                }
+
+                if (petDTO.HungryImage != null && petDTO.HungryImage.Length > 0)
+                {
+                    var uniqueName = Guid.NewGuid() + Path.GetExtension(petDTO.HungryImage.FileName);
+                    var fullPath = Path.Combine(imagesFolder, uniqueName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await petDTO.HungryImage.CopyToAsync(stream);
+                    }
+                    hungryImagePath = Path.Combine("images", uniqueName).Replace("\\", "/");
+                }
+
+                if (petDTO.TooHungryImage != null && petDTO.TooHungryImage.Length > 0)
+                {
+                    var uniqueName = Guid.NewGuid() + Path.GetExtension(petDTO.TooHungryImage.FileName);
+                    var fullPath = Path.Combine(imagesFolder, uniqueName);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await petDTO.TooHungryImage.CopyToAsync(stream);
+                    }
+                    tooHungryImagePath = Path.Combine("images", uniqueName).Replace("\\", "/");
+                }
+
+                var pet = new Pet
+                {
+                    Name = petDTO.Name,
+                    Animal = petDTO.Animal,
+                    PetState = petDTO.PetState,
+                    IdleImage = normalImagePath,
+                    PetImage = petImagePath,
+                    HungryImage = hungryImagePath,
+                    ToHungryImage = tooHungryImagePath,
+                    UserId = petDTO.UserId
+                };
+
+                _context.Pets.Add(pet);
                 await _context.SaveChangesAsync();
+
+                var response = new PetGetDTO
+                {
+                    Id = pet.Id,
+                    Name = pet.Name,
+                    Animal = pet.Animal,
+                    PetState = pet.PetState,
+                    NormalImage = $"{Request.Scheme}://{Request.Host}/{normalImagePath}",
+                    PetImage = $"{Request.Scheme}://{Request.Host}/{petImagePath}",
+                    HungryImage = $"{Request.Scheme}://{Request.Host}/{hungryImagePath}",
+                    TooHungryImage = $"{Request.Scheme}://{Request.Host}/{tooHungryImagePath}",
+                    UserId = pet.UserId
+                };
+
+                return CreatedAtAction(nameof(GetPetById), new { id = pet.Id }, response);
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new { message = "Error intern durant la inserció." });
             }
-
-
-            return CreatedAtAction(nameof(GetPetById), new { id = pet.Id }, pet);
-            //return Ok(pet);
         }
 
         [Authorize(Roles = "Admin")]
@@ -113,6 +187,34 @@ namespace API.GameKittens.Controllers
             }
             try
             {
+                // Esborra la imatge normal
+                string? normalImageFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pet.IdleImage);
+                if (System.IO.File.Exists(normalImageFullPath))
+                {
+                    System.IO.File.Delete(normalImageFullPath);
+                }
+                // Esborra la imatge pet
+                string? petImageFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pet.PetImage);
+                if (System.IO.File.Exists(petImageFullPath))
+                {
+                    System.IO.File.Delete(petImageFullPath);
+                }
+
+                // Esborra la imatge hungry
+                string? hungryImageFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pet.HungryImage);
+                if (System.IO.File.Exists(hungryImageFullPath))
+                {
+                    System.IO.File.Delete(hungryImageFullPath);
+                }
+
+                // Esborra la imatge too hungry
+                string? tooHungryImageFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", pet.ToHungryImage);
+                if (System.IO.File.Exists(tooHungryImageFullPath))
+                {
+                    System.IO.File.Delete(tooHungryImageFullPath);
+                }
+
+
                 _context.Pets.Remove(pet);
                 await _context.SaveChangesAsync();
             }
@@ -153,13 +255,35 @@ namespace API.GameKittens.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [HttpGet("byUser/{id}")]
+        public async Task<ActionResult<PetGetDTO>> GetPetByUserId(string id)
+        {
+            var p = await _context.Pets.Where(p => p.UserId == id).FirstOrDefaultAsync();
+
+            if (p == null)
+            {
+                return NotFound();
+            }
+
+            PetGetDTO petGet = new PetGetDTO
+            {
+                Animal = p.Animal,
+                Name = p.Name,
+                PetState = p.PetState,
+                NormalImage = $"{Request.Scheme}://{Request.Host}/{p.IdleImage}",
+                PetImage = $"{Request.Scheme}://{Request.Host}/{p.PetImage}",
+                HungryImage = $"{Request.Scheme}://{Request.Host}/{p.HungryImage}",
+                TooHungryImage = $"{Request.Scheme}://{Request.Host}/{p.ToHungryImage}",
+                UserId = p.UserId
+            };
+
+            return Ok(petGet);
+        }
+
         private bool PetExists(int id)
         {
             return _context.Pets.Any(p => p.Id == id);
         }
     }
 }
-
-/*
- HttpGet(id) GetUserById
- */

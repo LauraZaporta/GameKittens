@@ -2,7 +2,6 @@
 using API.GameKittens.DTO;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +36,7 @@ namespace API.GameKittens.Controllers
                     ValidationVotes = t.ValidationVotes,
                     Title = t.Title,
                     Description = t.Description,
-                    ImageURL = t.ImageURL,
+                    ImageURL = $"{Request.Scheme}://{Request.Host}/{t.ImageURL}",
                     UserId = t.UserId,
                     UserName = $"{t.User.Name} + {t.User.Surename}"
                 })
@@ -57,6 +56,17 @@ namespace API.GameKittens.Controllers
                 return NotFound();
             }
 
+            STaskGetDTO taskGet = new STaskGetDTO
+            {
+                Id = task.Id,
+                ValidationVotes = task.ValidationVotes,
+                Title = task.Title,
+                Description = task.Description,
+                ImageURL = $"{Request.Scheme}://{Request.Host}/{task.ImageURL}",
+                UserId = task.UserId,
+                UserName = $"{task.User.Name} + {task.User.Surename}"
+            };
+
             return Ok(task);
         }
 
@@ -71,28 +81,54 @@ namespace API.GameKittens.Controllers
                 return NotFound("User not found.");
             }
 
-            var sTask = new STask
-            {
-                Title = staskDTO.Title,
-                Description = staskDTO.Description,
-                ValidationVotes = 0,
-                ImageURL = staskDTO.ImageURL,
-                UserId = staskDTO.UserId
-            };
-
             try
             {
-                await _context.STasks.AddAsync(sTask);
-                await _context.SaveChangesAsync();
+                string imagePath = string.Empty;
+
+                // wwwroot per defecte és una carpeta pública
+                var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                // Per si no existeix
+                Directory.CreateDirectory(imagesFolder);
+
+                // Genera un nom d'archiu amb identificador únic i amb l'extensió de la imatge enviada
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(staskDTO.ImageURL.FileName);
+                // Construeix la ruta final del fitxer
+                var filePath = Path.Combine(imagesFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await staskDTO.ImageURL.CopyToAsync(stream); // Copia la imatge donada dintre de la ruta filePath
+                }
+
+                // Guarda la ruta relativa com a URL a la BBDD
+                imagePath = Path.Combine("images", uniqueFileName).Replace("\\", "/");
+
+                var sTask = new STask
+                {
+                    Title = staskDTO.Title,
+                    Description = staskDTO.Description,
+                    ValidationVotes = 0,
+                    ImageURL = imagePath,
+                    UserId = staskDTO.UserId
+                };
+
+                try
+                {
+                    await _context.STasks.AddAsync(sTask);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    return BadRequest(ex);
+                }
+
+                return CreatedAtAction(nameof(GetSTaskById), new { id = sTask.Id }, staskDTO);
+                //return Ok(sTask);
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error en la inserció: {ex.Message}");
             }
-
-
-            return CreatedAtAction(nameof(GetSTaskById), new { id = sTask.Id }, staskDTO);
-            //return Ok(sTask);
         }
 
         [Authorize(Roles = "Admin, Boss")]
@@ -106,6 +142,15 @@ namespace API.GameKittens.Controllers
             }
             try
             {
+                if (sTask.ImageURL != null) // Per esborrar la imatge de la carpeta images
+                {
+                    string? imageFullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", sTask.ImageURL);
+                    if (System.IO.File.Exists(imageFullPath))
+                    {
+                        System.IO.File.Delete(imageFullPath); // Espera una ruta absoluta
+                    }
+                }
+
                 _context.STasks.Remove(sTask);
                 await _context.SaveChangesAsync();
             }
