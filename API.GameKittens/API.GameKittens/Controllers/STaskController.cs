@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using API.GameKittens.Context;
-using API.GameKittens.DTO;
+using API.GameKittens.DTO.STask;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using API.GameKittens.DTO;
+using API.GameKittens.DTO.User;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

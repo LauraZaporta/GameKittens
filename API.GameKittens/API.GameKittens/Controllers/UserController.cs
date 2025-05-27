@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using API.GameKittens.Context;
 using API.GameKittens.DTO;
+using API.GameKittens.DTO.User;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
