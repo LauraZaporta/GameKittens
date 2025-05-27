@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -206,4 +207,13 @@ fun GenerateRankCard(user: String, points: String){
             )
         }
     }
+}
+
+@Composable
+fun GenerateIndeterminateCircularIndicator(colorOne: Color, colorTwo: Color) {
+    CircularProgressIndicator(
+        modifier = Modifier.width(64.dp),
+        color = colorOne,
+        trackColor = colorTwo
+    )
 }

@@ -13,12 +13,14 @@ import kotlinx.coroutines.launch
 
 class VMRank : ViewModel() {
     val topUsers = mutableStateOf<List<UserRank>>(emptyList())
+    val apiLoaded = mutableStateOf(false)
 
     init {
         //asks for top employees list to the API
         viewModelScope.launch(Dispatchers.Default) {
             val usersToMap = APIUsers().listUsers()
             mapAndTopEmployeesToUserRank(usersToMap)
+            apiLoaded.value = true
         }
     }
 

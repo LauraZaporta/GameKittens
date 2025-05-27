@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 class VMProfile(userId: String?) : ViewModel(){
     val user = mutableStateOf<UserProfile?>(null)
-    val isPetHungry = mutableStateOf<Boolean?>(null)
 
     init {
         //ask for employee with id API

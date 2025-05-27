@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserProfile
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIndeterminateCircularIndicator
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateRowEmployeeInfo
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMProfile
@@ -42,13 +43,21 @@ import com.russhwolf.settings.get
 fun ScreenProfile(){
     val viewModel = viewModel{ VMProfile(settings["key"]) }
 
-    if (viewModel.user.value != null){
-        ScreenProfileArguments(viewModel.user.value!!, viewModel.isPetHungry.value)
+    if (viewModel.user.value == null){
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center)
+        {
+            GenerateIndeterminateCircularIndicator(ColorConstants.colorWhiteNotWhite,
+            ColorConstants.colorAncientPink)
+        }
+    } else {
+        ScreenProfileArguments(viewModel.user.value!!)
     }
 }
 
 @Composable
-fun ScreenProfileArguments(user: UserProfile, isPetHungry: Boolean?){
+fun ScreenProfileArguments(user: UserProfile){
     Column(
         modifier = Modifier
             .fillMaxSize()

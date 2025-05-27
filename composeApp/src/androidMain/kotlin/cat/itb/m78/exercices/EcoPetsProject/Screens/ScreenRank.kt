@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserRank
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIndeterminateCircularIndicator
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateRankCard
 import cat.itb.m78.exercices.EcoPetsProject.Others.brush
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
@@ -39,12 +40,15 @@ import kotlinx.serialization.Serializable
 fun ScreenRank(){
     val viewModel = viewModel{ VMRank() }
 
-    ScreenRankArguments(ranking = viewModel.topUsers.value)
+    ScreenRankArguments(
+        ranking = viewModel.topUsers.value,
+        loaded = viewModel.apiLoaded.value)
 }
 
 @Composable
 fun ScreenRankArguments(
-    ranking: List<UserRank>
+    ranking: List<UserRank>,
+    loaded: Boolean
 ){
     Column(
         modifier = Modifier
@@ -60,10 +64,15 @@ fun ScreenRankArguments(
             fontSize = 14.em,
             fontFamily = getFontFamily()
         )
-        Spacer(Modifier.height(15.dp))
-        LazyColumn(modifier = Modifier.padding(15.dp)) {
-            items(ranking) { user ->
-                GenerateRankCard("${ranking.indexOf(user)+1}    ${user.userName}", user.points.toString()+" S")
+        Spacer(Modifier.height(20.dp))
+        if (!loaded){
+            GenerateIndeterminateCircularIndicator(ColorConstants.colorCottonPink,
+                ColorConstants.colorGrey)
+        } else {
+            LazyColumn(modifier = Modifier.padding(15.dp)) {
+                items(ranking) { user ->
+                    GenerateRankCard("${ranking.indexOf(user)+1}    ${user.userName}", user.points.toString()+" S")
+                }
             }
         }
     }
