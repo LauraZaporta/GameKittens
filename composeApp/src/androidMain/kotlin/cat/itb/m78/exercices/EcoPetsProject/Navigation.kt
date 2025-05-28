@@ -1,4 +1,3 @@
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,14 +6,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -32,6 +35,8 @@ import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenListTasks
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenProfile
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenRank
 import cat.itb.m78.exercices.EcoPetsProject.Screens.ScreenSendPoints
+import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMPointsGeneral
+import cat.itb.m78.exercices.EcoPetsProject.settings
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -53,8 +58,9 @@ object Destination{
 }
 
 @Composable
-fun Navigation(){
+fun Navigation(viewModel: VMPointsGeneral = viewModel()){
     val navController = rememberNavController()
+    val points by viewModel.userPoints
 
     val listNavElementsBottom = listOf(
         NavigationBarItem("Tasks", Icons.Default.Check) { navController.navigate(Destination.ScreenListTasks) },
@@ -65,7 +71,7 @@ fun Navigation(){
         NavigationBarItemNoText(Icons.Default.AccountCircle) { navController.navigate(Destination.ScreenProfile) }
     )
 
-    Scaffold (topBar = { GenerateNavigationBarTop(listNavElementsTop, 0) },
+    Scaffold (topBar = { GenerateNavigationBarTop(listNavElementsTop, points) },
         bottomBar = { GenerateNavigationBarBottom(listNavElementsBottom) })
     { paddingValues ->
         Column(
@@ -103,7 +109,7 @@ fun Navigation(){
                     ScreenRank()
                 }
                 composable<Destination.ScreenSendPoints> {
-                    ScreenSendPoints()
+                    ScreenSendPoints(viewModel)
                 }
             }
         }

@@ -130,7 +130,8 @@ fun ScreenListTasksArguments(
                 }
             }
             Spacer(Modifier.height(20.dp))
-            LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+            LazyColumn(modifier = Modifier.padding(bottom = 70.dp),
+                horizontalAlignment = Alignment.CenterHorizontally) {
                 if (filteredTasks.isEmpty()){
                     item{
                         Spacer(Modifier.height(15.dp))

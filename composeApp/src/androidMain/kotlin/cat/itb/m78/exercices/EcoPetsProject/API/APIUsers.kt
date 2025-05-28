@@ -34,8 +34,13 @@ data class UserData(
 
 @Serializable
 data class LoginRequest(val email: String, val password: String)
+
 @Serializable
-data class LoginResponse(val token: String)
+data class SendPointsRequest(
+    @SerialName("UserId") val userId: String,
+    @SerialName("TargetUserId") val targetUserId: String,
+    @SerialName("PointsToGive") val pointsToSend: Int
+)
 
 class APIUsers() {
     private val controller = "User"
@@ -100,5 +105,13 @@ class APIUsers() {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }
         }.body()
+    }
+
+    // Send points function
+    suspend fun sendPoints(userId: String, targetUserId: String, pointsToSend: Int){
+        client.post("$apiBaseUrl/$controller/GivePoints") {
+            contentType(ContentType.Application.Json)
+            setBody(SendPointsRequest(userId, targetUserId, pointsToSend))
+        }
     }
 }

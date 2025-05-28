@@ -87,7 +87,12 @@ fun ScreenLoginArguments(
             fontSize = 17.em,
             fontFamily = getFontFamily()
         )
-        Spacer(Modifier.height(35.dp))
+        Text("Beta",
+            color = ColorConstants.colorGrey,
+            fontSize = 7.em,
+            fontFamily = getFontFamily()
+        )
+        Spacer(Modifier.height(40.dp))
         AsyncImage(
             model = "https://media-public.canva.com/cRaKc/MAF0vtcRaKc/1/tl.png",
             contentDescription = "Cat pets logo",

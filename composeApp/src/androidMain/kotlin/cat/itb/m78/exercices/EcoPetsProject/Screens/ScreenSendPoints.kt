@@ -36,26 +36,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
+import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMPointsGeneral
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMSendPoints
 
 @Composable
-fun ScreenSendPoints(){
+fun ScreenSendPoints(vmPointsGeneral: VMPointsGeneral){
     val viewModel = viewModel{ VMSendPoints() }
 
     ScreenSendPointsArguments(
-        userName = viewModel.chosenUserName,
+        chosenUserName = viewModel.chosenUserName,
+        chosenId = viewModel.chosenId,
         userList = viewModel.employees.value,
         nameList = viewModel.employeesNames.value,
         pointsToSend = viewModel.pointsToSend,
         pointsShared = viewModel.pointsSharedSuccess.value,
         employeeSelected = viewModel.employeeSelected,
-        addPointsToTheUser = { viewModel.addPointsToTheUser() }
+        addPointsToTheUser = { viewModel.addPointsToTheUser(vmPointsGeneral) }
     )
 }
 
 @Composable
 fun ScreenSendPointsArguments(
-    userName: MutableState<String>,
+    chosenUserName: MutableState<String>,
+    chosenId: MutableState<String>,
     userList: List<Employee>,
     nameList: List<String>,
     pointsToSend: MutableState<String>,
@@ -63,7 +66,7 @@ fun ScreenSendPointsArguments(
     employeeSelected: MutableState<Boolean>,
     addPointsToTheUser: () -> Unit
 ){
-    val filteredEmployees = userList.filter { it.userName.contains(userName.value, ignoreCase = true) }
+    val filteredEmployees = userList.filter { it.userName.contains(chosenUserName.value, ignoreCase = true) }
 
     Column (
         modifier = Modifier
@@ -81,10 +84,10 @@ fun ScreenSendPointsArguments(
             )
             Spacer(Modifier.height(20.dp))
             OutlinedTextField(
-                value = userName.value,
+                value = chosenUserName.value,
                 onValueChange = {
-                    userName.value = it
-                    if (!nameList.contains(userName.value)) employeeSelected.value = false
+                    chosenUserName.value = it
+                    if (!nameList.contains(chosenUserName.value)) employeeSelected.value = false
                 },
                 label = { Text("User to send points") },
                 modifier = Modifier.width(300.dp)
@@ -116,7 +119,7 @@ fun ScreenSendPointsArguments(
             }
             Spacer(Modifier.height(40.dp))
             LazyColumn{
-                if (!employeeSelected.value && userName.value != "") {
+                if (!employeeSelected.value && chosenUserName.value != "") {
                     items(filteredEmployees.chunked(2)) { rowEmployees ->
                         Row(
                             modifier = Modifier.width(400.dp),
@@ -130,7 +133,8 @@ fun ScreenSendPointsArguments(
                                         .clickable(
                                             enabled = true,
                                             onClickLabel = "Clickable name",
-                                            onClick = { userName.value = emp.userName
+                                            onClick = { chosenUserName.value = emp.userName
+                                                chosenId.value = emp.id
                                                 employeeSelected.value = true}
                                         )
                                 ) {
@@ -158,7 +162,6 @@ fun ScreenSendPointsArguments(
                 }
             }
             if (pointsShared == false){
-                Spacer(Modifier.height(20.dp))
                 Text("The values are not valid!",
                     color = ColorConstants.colorAncientPink,
                     fontSize = 4.em,

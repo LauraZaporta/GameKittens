@@ -1,10 +1,12 @@
 package cat.itb.m78.exercices.EcoPetsProject.ViewModels
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cat.itb.m78.exercices.EcoPetsProject.API.APIUsers
 import cat.itb.m78.exercices.EcoPetsProject.settings
+import com.russhwolf.settings.get
 import kotlinx.coroutines.launch
 
 class VMLogin: ViewModel(){
@@ -28,9 +30,12 @@ class VMLogin: ViewModel(){
 
                     loginMessage.value = "Login successful!"
                     validLogin.value = true
+                    val userInfo = APIUsers().detailUser(settings.getStringOrNull("key").toString())
+                    settings.putInt("points", userInfo.points)
                     navigateToNavigationApp()
                 } catch (e: Exception) {
-                    loginMessage.value = "Login failed! ${e.message}"
+                    Log.e("LoginError", "Login failed", e)
+                    loginMessage.value = "Login failed!"
                     validLogin.value = false
                 }
             } else {

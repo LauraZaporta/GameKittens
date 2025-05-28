@@ -34,10 +34,13 @@ data class TaskData(
 )
 
 @Serializable
-data class InsertTaskData(
-    val title: String,
-    val description: String,
-    //...
+data class TaskDetailData(
+    @SerialName("id") val id: Int,
+    @SerialName("validationVotes") val votes: Int,
+    @SerialName("title") val title: String,
+    @SerialName("description") val desc: String?,
+    @SerialName("imageURL") val image: String,
+    @SerialName("userId") val userId: String,
 )
 
 class APITasks() {
@@ -62,7 +65,7 @@ class APITasks() {
         return client.get("$apiBaseUrl/$controller").body()
     }
 
-    suspend fun detailTask(id: Int): TaskData {
+    suspend fun detailTask(id: Int): TaskDetailData {
         return client.get("$apiBaseUrl/$controller/$id").body()
     }
 
