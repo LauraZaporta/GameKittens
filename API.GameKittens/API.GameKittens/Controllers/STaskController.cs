@@ -243,21 +243,21 @@ namespace API.GameKittens.Controllers
             var existingVote = await _context.STaskVotes
                 .FirstOrDefaultAsync(v => v.TaskId == taskId && v.UserId == userId);
 
-            if (existingVote == null)
-                return BadRequest("You haven't voted for this task.");
+            if (existingVote != null)
+                return BadRequest("You already voted for this task.");
 
-            _context.STaskVotes.Remove(existingVote);
+            _context.STaskVotes.Add(new STaskVote { UserId = userId, TaskId = taskId });
             task.ValidationVotes -= 1;
             task.Validate = task.ValidationVotes > 0;
 
             if (task.ValidationVotes < 0)
             {
-                _context.STasks.Remove(task);
+                _context.STasks.Remove(task);// Bug here
             }
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Vote removed." });
+            return Ok(new { message = "Vote added." });
         }
 
 

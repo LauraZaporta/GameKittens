@@ -34,7 +34,7 @@ namespace API.GameKittens.Context
                 .HasOne(v => v.Task)
                 .WithMany()
                 .HasForeignKey(v => v.TaskId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
