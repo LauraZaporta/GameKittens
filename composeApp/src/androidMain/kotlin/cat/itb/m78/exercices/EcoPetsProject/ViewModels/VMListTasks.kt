@@ -10,7 +10,6 @@ import cat.itb.m78.exercices.EcoPetsProject.API.APITasks
 import cat.itb.m78.exercices.EcoPetsProject.API.APIUsers
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
-import cat.itb.m78.exercices.EcoPetsProject.DTOs.UserRank
 import cat.itb.m78.exercices.EcoPetsProject.settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +51,14 @@ class VMListTasks : ViewModel(){
             loading.value = false
         }
     }
-    fun dislike(task: Task){ } //TODO
+    fun dislike(task: Task){
+        viewModelScope.launch {
+            loading.value = true
+            APITasks().dislikeTask(task.id, task.employee.id)
+            loadTasks()
+            loading.value = false
+        }
+    }
 
     private suspend fun loadTasks(){
         val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())

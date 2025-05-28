@@ -34,9 +34,6 @@ data class TaskData(
 )
 
 @Serializable
-data class VoteRequest(val taskId: Int, val userId: String)
-
-@Serializable
 data class InsertTaskData(
     val title: String,
     val description: String,
@@ -102,5 +99,8 @@ class APITasks() {
     // Vote functions
     suspend fun likeTask(taskId: Int, userId: String) {
         client.post("$apiBaseUrl/$controller/like/$taskId?userId=$userId")
+    }
+    suspend fun dislikeTask(taskId: Int, userId: String) {
+        client.post("$apiBaseUrl/$controller/dislike/$taskId?userId=$userId")
     }
 }
