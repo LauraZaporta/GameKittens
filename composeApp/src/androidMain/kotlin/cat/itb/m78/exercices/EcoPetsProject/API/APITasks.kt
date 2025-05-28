@@ -22,8 +22,8 @@ import java.io.File
 data class TaskData(
     @SerialName("id") val id: Int,
     @SerialName("validationVotes") val votes: Int,
-    @SerialName("title") val name: String,
-    @SerialName("description") val surname: String?,
+    @SerialName("title") val title: String,
+    @SerialName("description") val desc: String?,
     @SerialName("imageURL") val image: String,
     @SerialName("userId") val userId: String,
     @SerialName("userName") val userName: String

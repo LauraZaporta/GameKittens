@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIndeterminateCircularIndicator
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMListTasks
 
@@ -50,16 +51,26 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
 {
     val viewModel = viewModel{ VMListTasks() }
 
-    ScreenListTasksArguments(
-        tasks = viewModel.sortedTasksList.value,
-        stringFilter = viewModel.filterString,
-        navigateToScreenAddTask = { navigateToScreenAddTask() },
-        navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) },
-        like = viewModel::like,
-        dislike = viewModel::dislike,
-        sort = viewModel::sort,
-        sortIcon = viewModel.sortIcon.value
-    )
+    if (viewModel.loading.value){
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center)
+        {
+            GenerateIndeterminateCircularIndicator(ColorConstants.colorWhiteNotWhite,
+                ColorConstants.colorAncientPink)
+        }
+    } else {
+        ScreenListTasksArguments(
+            tasks = viewModel.sortedTasksList.value,
+            stringFilter = viewModel.filterString,
+            navigateToScreenAddTask = { navigateToScreenAddTask() },
+            navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) },
+            like = viewModel::like,
+            dislike = viewModel::dislike,
+            sort = viewModel::sort,
+            sortIcon = viewModel.sortIcon.value
+        )
+    }
 }
 
 @Composable
