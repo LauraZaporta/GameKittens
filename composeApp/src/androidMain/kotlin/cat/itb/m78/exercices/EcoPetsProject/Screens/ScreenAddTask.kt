@@ -1,11 +1,11 @@
 package cat.itb.m78.exercices.EcoPetsProject.Screens
 
 import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.em
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateImageButton
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIndeterminateCircularIndicator
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMAddTask
 import coil3.compose.AsyncImage
@@ -50,13 +51,15 @@ fun ScreenAddTask(imageUri: Uri?, navigateToScreenCamera: () -> Unit) {
         addTaskVM.uri.value = imageUri
     }
     ScreenAddTaskArguments(addTaskVM.uri, addTaskVM.title, addTaskVM.desc, addTaskVM.addingImage,
-        addTaskVM.validNewTask.value ,addTaskVM::addTask, navigateToScreenCamera)
+        addTaskVM.validNewTask.value ,addTaskVM::addTask, navigateToScreenCamera,
+        addTaskVM.insertLoaded.value)
 }
 
 @Composable
 fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<String>,
                            newDesc : MutableState<String>, addingImage: MutableState<Boolean>,
-                           validTask: Boolean?, addTask : () -> Unit, navigateToScreenCamera: () -> Unit)
+                           validTask: Boolean?, addTask : (Context) -> Unit,
+                           navigateToScreenCamera: () -> Unit, insertLoaded: Boolean)
 {
     val context = LocalContext.current
     val galleryLauncher = rememberLauncherForActivityResult(
@@ -148,7 +151,7 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
         Spacer(Modifier.height(30.dp))
         Button(
             modifier = Modifier.height(60.dp).width(100.dp),
-            onClick = { addTask() },
+            onClick = { addTask(context) },
             shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = ColorConstants.colorCottonPink)
@@ -158,6 +161,10 @@ fun ScreenAddTaskArguments(newUri: MutableState<Uri?>, newTitle : MutableState<S
                 fontSize = 4.em,
                 fontFamily = getFontFamily()
             )
+        }
+        if (!insertLoaded){
+            Spacer(Modifier.height(25.dp))
+            GenerateIndeterminateCircularIndicator(ColorConstants.colorWhiteNotWhite, ColorConstants.colorAncientPink)
         }
         if (validTask == true){
             Spacer(Modifier.height(20.dp))

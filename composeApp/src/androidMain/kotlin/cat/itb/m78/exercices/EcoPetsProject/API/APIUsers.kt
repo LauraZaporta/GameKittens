@@ -38,6 +38,7 @@ data class LoginRequest(val email: String, val password: String)
 data class LoginResponse(val token: String)
 
 class APIUsers() {
+    private val controller = "User"
 
     private val client = HttpClient() {
         install(ContentNegotiation) {
@@ -86,7 +87,7 @@ class APIUsers() {
     // Get functions
     suspend fun listUsers(): List<UserData> {
         val token: String? = settings.getStringOrNull("token")
-        return client.get("$apiBaseUrl/User") {
+        return client.get("$apiBaseUrl/$controller") {
             headers {
                 bearerAuth(token!!)
             }
@@ -94,7 +95,7 @@ class APIUsers() {
     }
     suspend fun detailUser(id: String): UserData {
         val token: String? = settings.getStringOrNull("token")
-        return client.get("$apiBaseUrl/user/$id") {
+        return client.get("$apiBaseUrl/$controller/$id") {
             headers {
                 append(HttpHeaders.Authorization, "Bearer $token")
             }

@@ -59,6 +59,10 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
 
+            implementation("io.ktor:ktor-client-serialization:2.3.0")
+            implementation("io.ktor:ktor-client-core:2.3.0")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
             implementation("app.cash.sqldelight:coroutines-extensions:2.0.2")
             implementation("io.coil-kt.coil3:coil-compose:3.1.0")
             implementation("io.coil-kt.coil3:coil-network-ktor3:3.1.0")
@@ -78,6 +82,8 @@ kotlin {
             implementation(libs.androidx.activityCompose)
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
+
+            implementation("io.ktor:ktor-client-okhttp:2.3.0")
             implementation("androidx.startup:startup-runtime:1.2.0")
             implementation("app.cash.sqldelight:android-driver:2.0.2")
             implementation("com.google.accompanist:accompanist-permissions:0.37.2")
