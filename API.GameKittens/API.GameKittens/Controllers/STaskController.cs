@@ -71,7 +71,7 @@ namespace API.GameKittens.Controllers
                 UserId = task.UserId
             };
 
-            return Ok(task);
+            return Ok(taskGet);
         }
 
         //[Authorize(Roles = "User, Admin")]
@@ -127,7 +127,6 @@ namespace API.GameKittens.Controllers
                 }
 
                 return CreatedAtAction(nameof(GetSTaskById), new { id = sTask.Id }, staskDTO);
-                //return Ok(sTask);
             }
             catch (Exception ex)
             {
@@ -221,6 +220,8 @@ namespace API.GameKittens.Controllers
             if (task.ValidationVotes > 3)
             {
                 task.User.Points = targetUser.Points + 10;
+                user.Points = user.Points - 10;
+                _context.STasks.Remove(task);
             }
 
             await _context.SaveChangesAsync();
@@ -232,8 +233,11 @@ namespace API.GameKittens.Controllers
         [HttpPost("dislike/{taskId}")]
         public async Task<IActionResult> DislikeTask(int taskId, string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
             var task = await _context.STasks.FindAsync(taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+
             if (task == null) return NotFound();
 
             var existingVote = await _context.STaskVotes
@@ -245,6 +249,11 @@ namespace API.GameKittens.Controllers
             _context.STaskVotes.Remove(existingVote);
             task.ValidationVotes -= 1;
             task.Validate = task.ValidationVotes > 0;
+
+            if (task.ValidationVotes < 0)
+            {
+                _context.STasks.Remove(task);
+            }
 
             await _context.SaveChangesAsync();
 
@@ -258,8 +267,3 @@ namespace API.GameKittens.Controllers
         }
     }
 }
-
-/*
-HttpGet(employee/id) GetTaskByUserId
-HttpPatch(id) bool TaskValidate
-*/
