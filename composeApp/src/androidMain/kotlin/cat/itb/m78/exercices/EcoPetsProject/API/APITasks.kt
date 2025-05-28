@@ -9,8 +9,12 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.SerialName
@@ -28,6 +32,9 @@ data class TaskData(
     @SerialName("userId") val userId: String,
     @SerialName("userName") val userName: String
 )
+
+@Serializable
+data class VoteRequest(val taskId: Int, val userId: String)
 
 @Serializable
 data class InsertTaskData(
@@ -90,5 +97,10 @@ class APITasks() {
             e.printStackTrace()
             false
         }
+    }
+
+    // Vote functions
+    suspend fun likeTask(taskId: Int, userId: String) {
+        client.post("$apiBaseUrl/$controller/like/$taskId?userId=$userId")
     }
 }

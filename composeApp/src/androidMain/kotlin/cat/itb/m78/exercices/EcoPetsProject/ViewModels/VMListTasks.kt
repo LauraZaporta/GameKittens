@@ -25,29 +25,7 @@ class VMListTasks : ViewModel(){
 
     init {
         viewModelScope.launch(Dispatchers.Default){
-            val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())
-            val userMapped = Employee(
-                id = userAPI.id,
-                name = userAPI.name,
-                userName = userAPI.username,
-                surname = userAPI.surname,
-                dni = userAPI.dni,
-                phone = userAPI.phone,
-                email = userAPI.email,
-                points = userAPI.points
-            )
-            val tasks = APITasks().listTasks()
-            tasksList.value = tasks.map { t ->
-                Task(
-                    id = t.id,
-                    votes = t.votes,
-                    title = t.title,
-                    description = t.desc.toString(),
-                    imageURI = t.image,
-                    employee = userMapped
-                )
-            }
-            sortedTasksList.value = tasksList.value.sortedByDescending { it.votes }
+            loadTasks()
             loading.value = false
         }
     }
@@ -66,6 +44,39 @@ class VMListTasks : ViewModel(){
         }
     }
 
-    fun like(task: Task){ }
-    fun dislike(task: Task){ }
+    fun like(task: Task){
+        viewModelScope.launch {
+            loading.value = true
+            APITasks().likeTask(task.id, task.employee.id)
+            loadTasks()
+            loading.value = false
+        }
+    }
+    fun dislike(task: Task){ } //TODO
+
+    private suspend fun loadTasks(){
+        val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())
+        val userMapped = Employee(
+            id = userAPI.id,
+            name = userAPI.name,
+            userName = userAPI.username,
+            surname = userAPI.surname,
+            dni = userAPI.dni,
+            phone = userAPI.phone,
+            email = userAPI.email,
+            points = userAPI.points
+        )
+        val tasks = APITasks().listTasks()
+        tasksList.value = tasks.map { t ->
+            Task(
+                id = t.id,
+                votes = t.votes,
+                title = t.title,
+                description = t.desc.toString(),
+                imageURI = t.image,
+                employee = userMapped
+            )
+        }
+        sortedTasksList.value = tasksList.value.sortedByDescending { it.votes }
+    }
 }
