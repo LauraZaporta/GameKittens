@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using API.GameKittens.DTO;
+using API.GameKittens.DTO.User;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -25,21 +25,12 @@ namespace API.GameKittens.Controllers
             _configuration = configuration;
         }
 
-        /// <summary>
-        ///     Prova per a comprovar claims del Token. Only development enviromment
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("prova")]
-        public IActionResult ProvaToken()
-        {
-            return Ok(new
-            {
-                Usuari = User.Identity?.Name,
-                Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-                Rol = User.FindFirst(ClaimTypes.Role)?.Value
-            });
-        }
 
+        /// <summary>
+        /// Register a new user with standard role.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>HttpOk Result</returns>
         [HttpPost("registre")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDTO model)
         {
@@ -68,6 +59,11 @@ namespace API.GameKittens.Controllers
             return BadRequest(resultat.Errors);
         }
 
+        /// <summary>
+        /// Register a new user with Boss role.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>HttpOk Result</returns>
         [HttpPost("boss/registre")]
         public async Task<IActionResult> BossRegister([FromBody] UserRegisterDTO model)
         {
@@ -96,6 +92,11 @@ namespace API.GameKittens.Controllers
             return BadRequest(resultat.Errors);
         }
 
+        /// <summary>
+        /// Register a new user with Admin role.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>HttpOk Result</returns>
         [HttpPost("admin/registre")]
         public async Task<IActionResult> AdminRegister([FromBody] UserRegisterDTO model)
         {
@@ -124,6 +125,11 @@ namespace API.GameKittens.Controllers
             return BadRequest(resultat.Errors);
         }
 
+        /// <summary>
+        /// User login
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Password hash</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
@@ -152,6 +158,11 @@ namespace API.GameKittens.Controllers
             return Ok(CreateToken(claims.ToArray()));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="claims"></param>
+        /// <returns></returns>
         private string CreateToken(Claim[] claims)
         {
             // Carreguem les dades des del appsettings.json

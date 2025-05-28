@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using API.GameKittens.Context;
 using API.GameKittens.DTO;
+using API.GameKittens.DTO.User;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -127,6 +128,7 @@ namespace API.GameKittens.Controllers
         [HttpPost("GivePoints")]
         public async Task<IActionResult> GivePoints([FromBody] GivePointsDTO dto)
         {
+            var user = await _context.Users.FindAsync(dto.UserId);
             var targetUser = await _context.Users.FindAsync(dto.TargetUserId);
             if (targetUser == null)
             {
@@ -138,7 +140,13 @@ namespace API.GameKittens.Controllers
                 return BadRequest("Points must be greater than zero");
             }
 
+            if (dto.PointsToGive > user.Points)
+            {
+                return BadRequest("Not enough points to give");
+            }
+
             targetUser.Points += dto.PointsToGive;
+            user.Points -= dto.PointsToGive;
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Points given successfully", newTotalPoints = targetUser.Points });

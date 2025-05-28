@@ -1,6 +1,6 @@
 ﻿using API.GameKittens.Models;
 
-namespace API.GameKittens.DTO
+namespace API.GameKittens.DTO.User
 {
     public class UserRegisterDTO
     {

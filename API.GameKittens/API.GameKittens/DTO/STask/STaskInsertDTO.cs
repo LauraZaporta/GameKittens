@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.GameKittens.DTO
+namespace API.GameKittens.DTO.STask
 {
     public class STaskInsertDTO
     {

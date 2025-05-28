@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using API.GameKittens.Context;
-using API.GameKittens.DTO;
+using API.GameKittens.DTO.STask;
 using API.GameKittens.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +26,10 @@ namespace API.GameKittens.Controllers
             return Ok("Hello world");
         }
 
+        /// <summary>
+        /// EndPoint to get all tasks from STask table
+        /// </summary>
+        /// <returns></returns>
         //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<STaskGetDTO>>> GetAllSTasks()
@@ -67,7 +71,7 @@ namespace API.GameKittens.Controllers
                 UserId = task.UserId
             };
 
-            return Ok(task);
+            return Ok(taskGet);
         }
 
         //[Authorize(Roles = "User, Admin")]
@@ -123,7 +127,6 @@ namespace API.GameKittens.Controllers
                 }
 
                 return CreatedAtAction(nameof(GetSTaskById), new { id = sTask.Id }, staskDTO);
-                //return Ok(sTask);
             }
             catch (Exception ex)
             {
@@ -195,8 +198,12 @@ namespace API.GameKittens.Controllers
         [HttpPost("like/{taskId}")]
         public async Task<IActionResult> LikeTask(int taskId, string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
             var task = await _context.STasks.FindAsync(taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+            var targetUser = await _context.Users.FindAsync(task.UserId);
+
+
             if (task == null) return NotFound();
 
             var existingVote = await _context.STaskVotes
@@ -207,7 +214,15 @@ namespace API.GameKittens.Controllers
 
             _context.STaskVotes.Add(new STaskVote { UserId = userId, TaskId = taskId });
             task.ValidationVotes += 1;
-            task.Validate = task.ValidationVotes > 0;
+            task.Validate = task.ValidationVotes > 3;
+
+            // Añadir 10 puntos si son mas de 3 votos
+            if (task.ValidationVotes > 3)
+            {
+                task.User.Points = targetUser.Points + 10;
+                user.Points = user.Points - 10;
+                _context.STasks.Remove(task);
+            }
 
             await _context.SaveChangesAsync();
 
@@ -218,23 +233,31 @@ namespace API.GameKittens.Controllers
         [HttpPost("dislike/{taskId}")]
         public async Task<IActionResult> DislikeTask(int taskId, string userId)
         {
-            var user = await _context.Users.FindAsync(userId);
             var task = await _context.STasks.FindAsync(taskId);
+
+            var user = await _context.Users.FindAsync(userId);
+
+
             if (task == null) return NotFound();
 
             var existingVote = await _context.STaskVotes
                 .FirstOrDefaultAsync(v => v.TaskId == taskId && v.UserId == userId);
 
-            if (existingVote == null)
-                return BadRequest("You haven't voted for this task.");
+            if (existingVote != null)
+                return BadRequest("You already voted for this task.");
 
-            _context.STaskVotes.Remove(existingVote);
+            _context.STaskVotes.Add(new STaskVote { UserId = userId, TaskId = taskId });
             task.ValidationVotes -= 1;
             task.Validate = task.ValidationVotes > 0;
 
+            if (task.ValidationVotes < 0)
+            {
+                _context.STasks.Remove(task);// Bug here
+            }
+
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Vote removed." });
+            return Ok(new { message = "Vote added." });
         }
 
 
@@ -244,8 +267,3 @@ namespace API.GameKittens.Controllers
         }
     }
 }
-
-/*
-HttpGet(employee/id) GetTaskByUserId
-HttpPatch(id) bool TaskValidate
-*/

@@ -1,4 +1,4 @@
-﻿namespace API.GameKittens.DTO
+﻿namespace API.GameKittens.DTO.User
 {
     public class UserGetDTO
     {
