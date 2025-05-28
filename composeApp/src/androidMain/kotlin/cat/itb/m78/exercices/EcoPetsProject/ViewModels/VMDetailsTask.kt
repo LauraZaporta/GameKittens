@@ -1,35 +1,64 @@
 package cat.itb.m78.exercices.EcoPetsProject.ViewModels
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cat.itb.m78.exercices.EcoPetsProject.API.APITasks
+import cat.itb.m78.exercices.EcoPetsProject.API.APIUsers
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Employee
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
+import cat.itb.m78.exercices.EcoPetsProject.settings
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class VMDetailsTask(id:Int) : ViewModel(){
+class VMDetailsTask(private val idTask: Int) : ViewModel(){
     val task = mutableStateOf<Task?>(null)
+    val loading = mutableStateOf(true)
 
     init {
-        //asks for task with id to the API
-        val sampleEmployee = Employee("12345",
-            "HMiku",
-            "Hola",
-            "Adéu",
-            "78230984Z",
-            "987654321",
-            "@gmail.com",
-            0)
-        val sampleTask = Task(
-            id = 1,
-            votes = 5,
-            title = "Nova funcionalitat",
-            description = "Implementar la pantalla de login",
-            imageURI = "https://vignette.wikia.nocookie.net/dragonage/images/f/f0/Masterdennet.png/revision/latest/scale-to-width-down/350?cb=20170830213930",
-            employee = sampleEmployee
-        )
-        task.value = sampleTask
+        viewModelScope.launch(Dispatchers.Default){
+            loadTask()
+            loading.value = false
+        }
     }
 
-    fun like(){ }
-    fun dislike(){ }
+    fun like(){
+        viewModelScope.launch {
+            loading.value = true
+            APITasks().likeTask(task.value!!.id, task.value!!.employee.id)
+            loadTask()
+            loading.value = false
+        }
+    }
+    fun dislike(){
+        viewModelScope.launch {
+            loading.value = true
+            APITasks().dislikeTask(task.value!!.id, task.value!!.employee.id)
+            loadTask()
+            loading.value = false
+        }
+    }
+
+    private suspend fun loadTask(){
+        val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())
+        val userMapped = Employee(
+            id = userAPI.id,
+            name = userAPI.name,
+            userName = userAPI.username,
+            surname = userAPI.surname,
+            dni = userAPI.dni,
+            phone = userAPI.phone,
+            email = userAPI.email,
+            points = userAPI.points
+        )
+        val t = APITasks().detailTask(idTask)
+        task.value = Task(
+            id = t.id,
+            votes = t.votes,
+            title = t.title,
+            description = t.desc.toString(),
+            imageURI = t.image,
+            employee = userMapped
+        )
+    }
 }

@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cat.itb.m78.exercices.EcoPetsProject.DTOs.Task
 import cat.itb.m78.exercices.EcoPetsProject.Others.ColorConstants
 import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIconButton
+import cat.itb.m78.exercices.EcoPetsProject.Others.GenerateIndeterminateCircularIndicator
 import cat.itb.m78.exercices.EcoPetsProject.Others.getFontFamily
 import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMDetailsTask
 import coil3.compose.AsyncImage
@@ -36,7 +37,16 @@ import coil3.compose.AsyncImage
 fun ScreenDetailsTask(idTask : Int){
     val viewModel = viewModel{ VMDetailsTask(idTask) }
 
-    if (viewModel.task.value != null){
+    if (viewModel.loading.value){
+        Column(modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center)
+        {
+            GenerateIndeterminateCircularIndicator(ColorConstants.colorWhiteNotWhite,
+                ColorConstants.colorAncientPink)
+        }
+    }
+    else if (viewModel.task.value != null){
         ScreenDetailsTaskArguments( task = viewModel.task.value!!,
             like = viewModel::like,
             dislike = viewModel::dislike)
