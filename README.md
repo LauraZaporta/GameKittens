@@ -56,8 +56,10 @@ Hem organitzat el projecte d’aquesta manera per evitar conflictes i poder treb
 
 Per trobar més informació detallada de cada part del projecte, clica un dels enllaços següents:
 
-- 📘 [API Documentació](./API.GameKittens/README.md)
-- 📙 [App Documentació](./GameKittensApp/README.md)
+- 📗 [Documentació general i Teoria](https://docs.google.com/document/d/15A9gMML3P4agQ3Egl2lDxck9P6-OxEwq7QRU53F7OLg/edit?usp=sharing)
+- 📘 [API Documentació](https://docs.google.com/document/d/1R6T_yHg1oAO3CO7gpXE-bXgvs5sO4FyABR5O20chf6E/edit?usp=sharing)
+- 📙 [App Documentació](https://docs.google.com/document/d/1EmhLFCvW5_7QQ0qsxGIfRCs87TEb5H0ALW8dMwDnnkM/edit?usp=sharing)
+- 🖥️ [Presentació PDF](https://drive.google.com/file/d/1er3SznT2uXSKqpeGhC1BktbKm7_1HrFn/view?usp=sharing)
 
 ## Carpeta de recursos
 
