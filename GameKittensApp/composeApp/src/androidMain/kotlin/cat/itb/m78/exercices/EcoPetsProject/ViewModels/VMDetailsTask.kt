@@ -11,7 +11,7 @@ import cat.itb.m78.exercices.EcoPetsProject.settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class VMDetailsTask(private val idTask: Int) : ViewModel(){
+class VMDetailsTask(private val idTask: Int, private val userName: String) : ViewModel(){
     val task = mutableStateOf<Task?>(null)
     val loading = mutableStateOf(true)
 
@@ -47,7 +47,7 @@ class VMDetailsTask(private val idTask: Int) : ViewModel(){
             title = t.title,
             description = t.desc.toString(),
             imageURI = t.image,
-            employeeUsername = t.userName.toString()
+            employeeUsername = userName
         )
     }
 }

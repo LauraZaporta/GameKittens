@@ -35,8 +35,8 @@ import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMDetailsTask
 import coil3.compose.AsyncImage
 
 @Composable
-fun ScreenDetailsTask(idTask : Int){
-    val viewModel = viewModel{ VMDetailsTask(idTask) }
+fun ScreenDetailsTask(idTask : Int, userName: String){
+    val viewModel = viewModel{ VMDetailsTask(idTask, userName) }
 
     if (viewModel.loading.value){
         Column(modifier = Modifier.fillMaxSize(),

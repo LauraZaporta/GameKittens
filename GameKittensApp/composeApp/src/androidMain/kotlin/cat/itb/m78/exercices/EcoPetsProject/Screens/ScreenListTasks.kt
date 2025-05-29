@@ -47,7 +47,7 @@ import cat.itb.m78.exercices.EcoPetsProject.ViewModels.VMListTasks
 
 @Composable
 fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
-                    navigateToScreenDetailsTask: (Int) -> Unit)
+                    navigateToScreenDetailsTask: (Int, String) -> Unit)
 {
     val viewModel = viewModel{ VMListTasks() }
 
@@ -64,7 +64,7 @@ fun ScreenListTasks(navigateToScreenAddTask: () -> Unit,
             tasks = viewModel.sortedTasksList.value,
             stringFilter = viewModel.filterString,
             navigateToScreenAddTask = { navigateToScreenAddTask() },
-            navigateToScreenDetailsTask = { navigateToScreenDetailsTask(it) },
+            navigateToScreenDetailsTask = { id, userName -> navigateToScreenDetailsTask(id, userName) },
             like = viewModel::like,
             dislike = viewModel::dislike,
             sort = viewModel::sort,
@@ -78,7 +78,7 @@ fun ScreenListTasksArguments(
     tasks: List<Task>,
     stringFilter: MutableState<String>,
     navigateToScreenAddTask:() -> Unit,
-    navigateToScreenDetailsTask:(Int) -> Unit,
+    navigateToScreenDetailsTask:(Int, String) -> Unit,
     like:(Task) -> Unit,
     dislike:(Task) -> Unit,
     sort:() -> Unit,
@@ -153,7 +153,7 @@ fun ScreenListTasksArguments(
                                     .clickable(
                                         enabled = true,
                                         onClickLabel = "Clickable card",
-                                        onClick = { navigateToScreenDetailsTask(task.id) }
+                                        onClick = { navigateToScreenDetailsTask(task.id, task.employeeUsername) }
                                     )
                             ) {
                                 Column(

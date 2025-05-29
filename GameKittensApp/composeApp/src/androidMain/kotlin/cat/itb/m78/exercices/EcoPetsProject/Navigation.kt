@@ -46,7 +46,7 @@ object Destination{
     @Serializable
     data object ScreenCamera
     @Serializable
-    data class ScreenDetailsTask (val idTask : Int)
+    data class ScreenDetailsTask (val idTask : Int, val userName : String)
     @Serializable
     data object ScreenListTasks
     @Serializable
@@ -96,11 +96,13 @@ fun Navigation(viewModel: VMPointsGeneral = viewModel()){
                 }
                 composable<Destination.ScreenDetailsTask> { backStack ->
                     val idTask = backStack.toRoute<Destination.ScreenDetailsTask>().idTask
-                    ScreenDetailsTask(idTask)
+                    val userName = backStack.toRoute<Destination.ScreenDetailsTask>().userName
+                    ScreenDetailsTask(idTask, userName)
                 }
                 composable<Destination.ScreenListTasks> {
                     ScreenListTasks(navigateToScreenAddTask = {navController.navigate(Destination.ScreenAddTask)},
-                        navigateToScreenDetailsTask = {navController.navigate(Destination.ScreenDetailsTask(it))})
+                        navigateToScreenDetailsTask = { id, name ->
+                            navController.navigate(Destination.ScreenDetailsTask(id, name))})
                 }
                 composable<Destination.ScreenProfile> {
                     ScreenProfile()
