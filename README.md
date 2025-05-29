@@ -67,6 +67,23 @@ Tots els recursos relacionats amb el projecte (imatges, documents, maquetes, etc
 
 📁 [Carpeta de recursos de Drive](https://drive.google.com/drive/folders/1E2QU0xWhww9-XvFphXE5SmJgjcR5ppJ3?usp=sharing)
 
+
+
+## Aplicació per a Android
+Aquest enllaç conté una APK per a Android de l'aplicació.
+
+📱 [Descarregar aplicació](https://drive.google.com/file/d/1LYCGy05cKpsZvVMpvwsRicVUktjToSJw/view?usp=drive_link)
+
+### Usuaris per utilitzar la app
+
+**Laura:**
+- Email: laura@gmail.com
+- Contrasenya: Laura2025!
+
+**Eudald:**
+- Email: eudald@gmail.com
+- Contrasenya: Eudald2025!
+
 ---
 
 ### Creat per
