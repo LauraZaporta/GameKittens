@@ -46,7 +46,7 @@ class VMListTasks : ViewModel(){
     fun like(task: Task){
         viewModelScope.launch {
             loading.value = true
-            APITasks().likeTask(task.id, task.employee.id)
+            APITasks().likeTask(task.id, settings.getString("key", ""))
             loadTasks()
             loading.value = false
         }
@@ -54,24 +54,13 @@ class VMListTasks : ViewModel(){
     fun dislike(task: Task){
         viewModelScope.launch {
             loading.value = true
-            APITasks().dislikeTask(task.id, task.employee.id)
+            APITasks().dislikeTask(task.id, settings.getString("key", ""))
             loadTasks()
             loading.value = false
         }
     }
 
     private suspend fun loadTasks(){
-        val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())
-        val userMapped = Employee(
-            id = userAPI.id,
-            name = userAPI.name,
-            userName = userAPI.username,
-            surname = userAPI.surname,
-            dni = userAPI.dni,
-            phone = userAPI.phone,
-            email = userAPI.email,
-            points = userAPI.points
-        )
         val tasks = APITasks().listTasks()
         tasksList.value = tasks.map { t ->
             Task(
@@ -80,7 +69,7 @@ class VMListTasks : ViewModel(){
                 title = t.title,
                 description = t.desc.toString(),
                 imageURI = t.image,
-                employee = userMapped
+                employeeUsername = t.userName.toString()
             )
         }
         sortedTasksList.value = tasksList.value.sortedByDescending { it.votes }

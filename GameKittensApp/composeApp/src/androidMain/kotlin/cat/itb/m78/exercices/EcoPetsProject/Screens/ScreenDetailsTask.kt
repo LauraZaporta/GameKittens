@@ -121,7 +121,7 @@ fun ScreenDetailsTaskArguments(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = "Made by ${task.employee.userName}",
+                    text = "Made by ${task.employeeUsername}",
                     fontFamily = getFontFamily(),
                     fontSize = 4.em,
                     color = Color.White

@@ -85,7 +85,7 @@ fun ScreenListTasksArguments(
     sortIcon: ImageVector)
 {
 
-    val filteredTasks = tasks.filter {it.employee.userName.contains(stringFilter.value, ignoreCase = true)}
+    val filteredTasks = tasks.filter {it.employeeUsername.contains(stringFilter.value, ignoreCase = true)}
 
     Box(modifier = Modifier.fillMaxSize())
     {
@@ -173,7 +173,8 @@ fun ScreenListTasksArguments(
                                     )
                                     Spacer(Modifier.height(5.dp))
                                     Text(
-                                        "Made by ${task.employee.userName}",
+                                        "Made by ${task.employeeUsername}",
+                                        textAlign = TextAlign.Center,
                                         color = ColorConstants.colorGrey,
                                         fontFamily = getFontFamily()
                                     )

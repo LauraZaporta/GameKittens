@@ -25,7 +25,7 @@ class VMDetailsTask(private val idTask: Int) : ViewModel(){
     fun like(){
         viewModelScope.launch {
             loading.value = true
-            APITasks().likeTask(task.value!!.id, task.value!!.employee.id)
+            APITasks().likeTask(task.value!!.id, settings.getString("key", ""))
             loadTask()
             loading.value = false
         }
@@ -33,24 +33,13 @@ class VMDetailsTask(private val idTask: Int) : ViewModel(){
     fun dislike(){
         viewModelScope.launch {
             loading.value = true
-            APITasks().dislikeTask(task.value!!.id, task.value!!.employee.id)
+            APITasks().dislikeTask(task.value!!.id, settings.getString("key", ""))
             loadTask()
             loading.value = false
         }
     }
 
     private suspend fun loadTask(){
-        val userAPI = APIUsers().detailUser(settings.getStringOrNull("key").toString())
-        val userMapped = Employee(
-            id = userAPI.id,
-            name = userAPI.name,
-            userName = userAPI.username,
-            surname = userAPI.surname,
-            dni = userAPI.dni,
-            phone = userAPI.phone,
-            email = userAPI.email,
-            points = userAPI.points
-        )
         val t = APITasks().detailTask(idTask)
         task.value = Task(
             id = t.id,
@@ -58,7 +47,7 @@ class VMDetailsTask(private val idTask: Int) : ViewModel(){
             title = t.title,
             description = t.desc.toString(),
             imageURI = t.image,
-            employee = userMapped
+            employeeUsername = t.userName.toString()
         )
     }
 }

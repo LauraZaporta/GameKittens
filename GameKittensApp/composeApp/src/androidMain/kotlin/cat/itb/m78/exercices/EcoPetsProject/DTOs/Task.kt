@@ -6,5 +6,5 @@ class Task(
     val title: String,
     val description: String,
     val imageURI: String,
-    val employee: Employee
+    val employeeUsername: String
 )

@@ -30,17 +30,7 @@ data class TaskData(
     @SerialName("description") val desc: String?,
     @SerialName("imageURL") val image: String,
     @SerialName("userId") val userId: String,
-    @SerialName("userName") val userName: String
-)
-
-@Serializable
-data class TaskDetailData(
-    @SerialName("id") val id: Int,
-    @SerialName("validationVotes") val votes: Int,
-    @SerialName("title") val title: String,
-    @SerialName("description") val desc: String?,
-    @SerialName("imageURL") val image: String,
-    @SerialName("userId") val userId: String,
+    @SerialName("userName") val userName: String?
 )
 
 class APITasks() {
@@ -65,7 +55,7 @@ class APITasks() {
         return client.get("$apiBaseUrl/$controller").body()
     }
 
-    suspend fun detailTask(id: Int): TaskDetailData {
+    suspend fun detailTask(id: Int): TaskData {
         return client.get("$apiBaseUrl/$controller/$id").body()
     }
 

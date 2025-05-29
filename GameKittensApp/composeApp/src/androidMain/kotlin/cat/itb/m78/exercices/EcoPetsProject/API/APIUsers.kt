@@ -80,7 +80,8 @@ class APIUsers() {
         settings.putString("token", token)
         val payloadJson = decodeJwtPayload(token)
         val jsonObject = Json.parseToJsonElement(payloadJson).jsonObject
-        val userId = jsonObject["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]?.jsonPrimitive?.content
+        val userId = jsonObject["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"]
+            ?.jsonPrimitive?.content
 
         if (userId != null) {
             settings.putString("key", userId)

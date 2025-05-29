@@ -111,7 +111,7 @@ fun ScreenSendPointsArguments(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = ColorConstants.colorVanilla)
             ) {
-                Text("Add",
+                Text("Send",
                     color = ColorConstants.colorAncientPink,
                     fontSize = 4.em,
                     fontFamily = getFontFamily()
